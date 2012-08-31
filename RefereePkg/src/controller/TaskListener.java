@@ -2,7 +2,6 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.EventListener;
-
 import model.BmtTask;
 import model.BntTask;
 import model.BttTask;

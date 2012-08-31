@@ -6,14 +6,11 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-
 import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import model.BmtTask;
 import model.BttTask;
 import model.Task;
 
@@ -61,8 +58,7 @@ public class BttPanel extends CompetitionPanel {
 	}
 
 	public void setValidSituations(List<String> situations) {
-		situationCbm = new DefaultComboBoxModel<String>(
-				situations.toArray(new String[situations.size()]));
+		situationCbm = new DefaultComboBoxModel<String>(situations.toArray(new String[situations.size()]));
 		situationBox.setModel(situationCbm);
 	}
 
@@ -90,8 +86,7 @@ public class BttPanel extends CompetitionPanel {
 	 *            A set of valid place labels and their pixel positions.
 	 */
 	public void setValidConfigurations(List<String> configuration) {
-		configurationCbm = new DefaultComboBoxModel<String>(
-				configuration.toArray(new String[configuration.size()]));
+		configurationCbm = new DefaultComboBoxModel<String>(configuration.toArray(new String[configuration.size()]));
 		configurationBox.setModel(configurationCbm);
 	}
 
@@ -102,8 +97,7 @@ public class BttPanel extends CompetitionPanel {
 	 *            A list of strings representing valid orientations.
 	 */
 	public void setValidObjects(List<String> object) {
-		objectCbm = new DefaultComboBoxModel<String>(
-				object.toArray(new String[object.size()]));
+		objectCbm = new DefaultComboBoxModel<String>(object.toArray(new String[object.size()]));
 		objectBox.setModel(objectCbm);
 	}
 
@@ -111,11 +105,11 @@ public class BttPanel extends CompetitionPanel {
 		sequenceTableModel.clearColumn(0);
 		sequenceTableModel.setRowCount(bttTaskList.size());
 		for (int i = 0; i < bttTaskList.size(); i++) {
-			super.sequenceTableModel.setValueAt(
-					((Task) bttTaskList.get(i)).getString(), i, 0);
+			super.sequenceTableModel.setValueAt(((Task) bttTaskList.get(i)).getString(), i, 0);
 		}
 	}
 
+  @Override
 	public BttTask getSelectedTask() {
 		BttTask t = new BttTask();
 		t.setSituation((String) situationBox.getSelectedItem());
@@ -125,6 +119,7 @@ public class BttPanel extends CompetitionPanel {
 		return t;
 	}
 
+  @Override
 	public void setTaskBoxSected(Task task) {
 		situationCbm.setSelectedItem(((BttTask) task).getSituation());
 		configurationCbm.setSelectedItem(((BttTask) task).getConfiguration());

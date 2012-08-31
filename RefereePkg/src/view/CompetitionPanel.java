@@ -3,14 +3,10 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.Action;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -18,10 +14,6 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-
-import model.BmtTask;
-import model.BntTask;
-import model.CompetitionIdentifier;
 import model.Task;
 
 public class CompetitionPanel extends JPanel {
@@ -53,11 +45,14 @@ public class CompetitionPanel extends JPanel {
 	class SequenceTableModel extends DefaultTableModel {
 		private static final long serialVersionUID = 1L;
 
+    @Override
 		public Class getColumnClass(int column) {
-			if (column >= 1)
-				return Boolean.class;
-			else
-				return String.class;
+			if (column >= 1) {
+        return Boolean.class;
+      }
+			else {
+        return String.class;
+      }
 		}
 
 		public void clearColumn(int c) {
@@ -66,11 +61,14 @@ public class CompetitionPanel extends JPanel {
 			}
 		}
 
+    @Override
 		public boolean isCellEditable(int row, int col) {
-			if (col == 0)
-				return false;
-			else
-				return true;
+			if (col == 0) {
+        return false;
+      }
+			else {
+        return true;
+      }
 		}
 	}
 
@@ -99,9 +97,7 @@ public class CompetitionPanel extends JPanel {
 	}
 
 	private final void createTableScrollPaneInPanel() {
-		sequenceTableScrollPane = new JScrollPane(
-				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		sequenceTableScrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		sequenceTableModel = new SequenceTableModel();
 		sequenceTableModel.addColumn("Subgoals");
 		sequenceTable = new JTable(sequenceTableModel);
@@ -111,8 +107,7 @@ public class CompetitionPanel extends JPanel {
 		sequenceTable.getColumn("Subgoals").setCellRenderer(tableCellRenderer);
 		tableCellRenderer.setHorizontalAlignment(JLabel.CENTER);
 		sequenceTableScrollPane.setViewportView(sequenceTable);
-		sequenceTableScrollPane.setPreferredSize(sequenceTable
-				.getPreferredSize());
+		sequenceTableScrollPane.setPreferredSize(sequenceTable.getPreferredSize());
 		this.add(sequenceTableScrollPane, BorderLayout.WEST);
 	}
 
@@ -175,7 +170,6 @@ public class CompetitionPanel extends JPanel {
 	}
 
 	public void setTaskBoxSected(Task task) {
-		;
 	}
 
 	public SequenceTableModel getSequenceTableModel() {

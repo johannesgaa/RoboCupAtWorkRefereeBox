@@ -1,5 +1,3 @@
-package Java;
-
 
 import org.zeromq.*;
 
@@ -10,10 +8,10 @@ public class JavaClient {
 		System.out.println(serverPort);
 		System.out.println("ServerIP: " + serverIP + " Server port: " + serverPort);
 		String taskSpecFromServer;
-		String tripletAcknowledge = new String("ACK");
+		String tripletAcknowledge = "ACK";
 		ZMQ.Context RobotModule = ZMQ.context(1);
 		ZMQ.Socket RobotClient_Socket = RobotModule.socket(ZMQ.REQ);
-		String connectStr = new String("tcp://" + serverIP + ":" + serverPort);
+		String connectStr = "tcp://" + serverIP + ":" + serverPort;
 		System.out.println("Connecting to server... ");
 		RobotClient_Socket.connect(connectStr);
 		RobotClient_Socket.send(teamName.getBytes(), 0);

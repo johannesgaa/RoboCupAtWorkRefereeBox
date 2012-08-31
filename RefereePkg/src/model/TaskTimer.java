@@ -76,15 +76,11 @@ public class TaskTimer implements ConnectionListener {
 			timerStop = false;
 			startTime = System.currentTimeMillis();
 			timer.scheduleAtFixedRate(new Task(), 10, 10);
-			logg.globalLogging(logId, "New config time  "
-					+ millisecToString(this.configTime));
-			logg.globalLogging(logId, "New run time "
-					+ millisecToString(this.runTime));
-			logg.globalLogging(logId, "Setup time started at "
-					+ millisecToString(usedTime));
+			logg.globalLogging(logId, "New config time  " + millisecToString(this.configTime));
+			logg.globalLogging(logId, "New run time " + millisecToString(this.runTime));
+			logg.globalLogging(logId, "Setup time started at " + millisecToString(usedTime));
 			notifyTimerReset(millisecToString(usedTime));
-			notifyTimerSetMaximumTime(("setup time: ")
-					.concat(millisecToString(this.configTime)));
+			notifyTimerSetMaximumTime(("setup time: ").concat(millisecToString(this.configTime)));
 		}
 	}
 
@@ -95,8 +91,7 @@ public class TaskTimer implements ConnectionListener {
 	public void stopTimer() {
 		timerStop = true;
 		logg.globalLogging(logId, "stopped at " + millisecToString(usedTime));
-		logg.competitionLogging(logId, "stopped at "
-				+ millisecToString(usedTime));
+		logg.competitionLogging(logId, "stopped at " + millisecToString(usedTime));
 	}
 
 	public void resetTimer() {
@@ -114,12 +109,9 @@ public class TaskTimer implements ConnectionListener {
 		usedTime = 0;
 		startRunTime = System.currentTimeMillis();
 		runTimeRunning = true;
-		notifyTimerSetMaximumTime(("run time: ")
-				.concat(millisecToString(runTime)));
-		logg.globalLogging(logId, "Run time started at "
-				+ millisecToString(usedTime));
-		logg.competitionLogging(logId, "Run time started at "
-				+ millisecToString(usedTime));
+		notifyTimerSetMaximumTime(("run time: ").concat(millisecToString(runTime)));
+		logg.globalLogging(logId, "Run time started at " + millisecToString(usedTime));
+		logg.competitionLogging(logId, "Run time started at " + millisecToString(usedTime));
 	}
 
 	private void notifyTimerTick(String currentTime, boolean inTime) {
@@ -128,8 +120,7 @@ public class TaskTimer implements ConnectionListener {
 		// and the second is the listener instance
 		for (int i = 0; i < listeners.length; i += 2) {
 			if (listeners[i] == TimerListener.class) {
-				((TimerListener) listeners[i + 1]).timerTick(currentTime,
-						inTime);
+				((TimerListener) listeners[i + 1]).timerTick(currentTime, inTime);
 			}
 		}
 	}

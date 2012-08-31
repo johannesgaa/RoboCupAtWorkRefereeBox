@@ -53,7 +53,8 @@ public class BntTask extends Task {
 		return pause;
 	}
 
+	@Override
 	public String getString() {
-		return (new String("(" + place + "," + orientation + "," + pause + ")"));
+		return ("(" + place + "," + orientation + "," + pause + ")");
 	}
 }

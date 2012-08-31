@@ -103,9 +103,7 @@ public class TaskSpec {
 								btt = itBtt.next();
 							else
 								btt = new BttTask();
-						} while (btt.getPlace().equals(previous.getPlace())
-								&& (btt.getConfiguration().equals(previous
-										.getConfiguration())));
+						} while (btt.getPlace().equals(previous.getPlace()) && (btt.getConfiguration().equals(previous.getConfiguration())));
 						s = s.substring(0, s.length() - 1); // comma is no
 						// longer needed
 						s = s.concat(")");
@@ -126,10 +124,8 @@ public class TaskSpec {
 				String sTeam2 = "";
 				do {
 					if (ctt.getSituation().equals("initial")) {
-						sTeam1 = sTeam1
-								.concat(ctt.getSituation() + "situation");
-						sTeam2 = sTeam2
-								.concat(ctt.getSituation() + "situation");
+						sTeam1 = sTeam1.concat(ctt.getSituation() + "situation");
+						sTeam2 = sTeam2.concat(ctt.getSituation() + "situation");
 						do {
 							sTeam1 = sTeam1.concat("(" + ctt.getPlace() + "(");
 							sTeam2 = sTeam2.concat("(" + ctt.getPlace() + "(");
@@ -141,15 +137,12 @@ public class TaskSpec {
 									ctt = itCtt.next();
 								else
 									ctt = new CttTask();
-							} while (ctt.getPlace().equals(previous.getPlace())
-									&& (ctt.getConfiguration().equals(previous
-											.getConfiguration())));
+							} while (ctt.getPlace().equals(previous.getPlace()) && (ctt.getConfiguration().equals(previous.getConfiguration())));
 							sTeam1 = sTeam1.substring(0, sTeam1.length() - 1);
 							sTeam2 = sTeam2.substring(0, sTeam2.length() - 1);
 							sTeam1 = sTeam1.concat(")");
 							sTeam2 = sTeam2.concat(")");
-						} while (ctt.getSituation().equals(
-								previous.getSituation()));
+						} while (ctt.getSituation().equals(previous.getSituation()));
 						sTeam1 = sTeam1.concat(")");
 						sTeam2 = sTeam2.concat(")");
 						sTeam1 = sTeam1.concat(";");
@@ -158,8 +151,7 @@ public class TaskSpec {
 						sTeam1 = sTeam1.concat("goalsituation");
 						do {
 							sTeam1 = sTeam1.concat("(" + ctt.getPlace() + ",");
-							sTeam1 = sTeam1
-									.concat(ctt.getConfiguration() + "(");
+							sTeam1 = sTeam1.concat(ctt.getConfiguration() + "(");
 							do {
 								sTeam1 = sTeam1.concat(ctt.getObject() + ",");
 								previous = ctt;
@@ -167,20 +159,16 @@ public class TaskSpec {
 									ctt = itCtt.next();
 								else
 									ctt = new CttTask();
-							} while (ctt.getPlace().equals(previous.getPlace())
-									&& (ctt.getConfiguration().equals(previous
-											.getConfiguration())));
+							} while (ctt.getPlace().equals(previous.getPlace()) && (ctt.getConfiguration().equals(previous.getConfiguration())));
 							sTeam1 = sTeam1.substring(0, sTeam1.length() - 1);
 							sTeam1 = sTeam1.concat(")");
-						} while (ctt.getSituation().equals(
-								previous.getSituation()));
+						} while (ctt.getSituation().equals(previous.getSituation()));
 						sTeam1 = sTeam1.concat(")");
 					} else if (ctt.getSituation().equals("team2Goal")) {
 						sTeam2 = sTeam2.concat("goalsituation");
 						do {
 							sTeam2 = sTeam2.concat("(" + ctt.getPlace() + ",");
-							sTeam2 = sTeam2
-									.concat(ctt.getConfiguration() + "(");
+							sTeam2 = sTeam2.concat(ctt.getConfiguration() + "(");
 							do {
 								sTeam2 = sTeam2.concat(ctt.getObject() + ",");
 								previous = ctt;
@@ -189,19 +177,16 @@ public class TaskSpec {
 								else {
 									ctt = new CttTask();
 								}
-							} while (ctt.getPlace().equals(previous.getPlace())
-									&& (ctt.getConfiguration().equals(previous
-											.getConfiguration())));
+							} while (ctt.getPlace().equals(previous.getPlace()) && (ctt.getConfiguration().equals(previous.getConfiguration())));
 							sTeam2 = sTeam2.substring(0, sTeam2.length() - 1);
 							sTeam2 = sTeam2.concat(")");
-						} while (ctt.getSituation().equals(
-								previous.getSituation()));
+						} while (ctt.getSituation().equals(previous.getSituation()));
 						sTeam2 = sTeam2.concat(")");
 					}
 				} while (ctt.getSituation().length() != 0);
 
 				s = s.concat(sTeam1);
-				s = s.concat(">#<");
+				s = s.concat(">#CTT<");
 				s = s.concat(sTeam2);
 			}
 			break;
@@ -220,40 +205,28 @@ public class TaskSpec {
 		case BNT:
 			BntTask bntTask = (BntTask) task;
 			bntTaskList.add(bntTask);
-			logg.globalLogging(taskListName,
-					CompetitionIdentifier.BNT + bntTask.getString() + " no. "
-							+ bntTaskList.indexOf(bntTask) + " added");
-			notifyBntTaskSpecChanged(bntTask, bntTaskList.indexOf(bntTask),
-					bntTaskList);
+			logg.globalLogging(taskListName, CompetitionIdentifier.BNT + bntTask.getString() + " no. " + bntTaskList.indexOf(bntTask) + " added");
+			notifyBntTaskSpecChanged(bntTask, bntTaskList.indexOf(bntTask), bntTaskList);
 			break;
 		case BMT:
 			BmtTask bmtTask = (BmtTask) task;
 			bmtTaskList.add(bmtTask);
-			logg.globalLogging(taskListName,
-					CompetitionIdentifier.BMT + bmtTask.getString() + " no. "
-							+ bmtTaskList.indexOf(bmtTask) + " added");
-			notifyBmtTaskSpecChanged(bmtTask, bmtTaskList.indexOf(bmtTask),
-					bmtTaskList);
+			logg.globalLogging(taskListName, CompetitionIdentifier.BMT + bmtTask.getString() + " no. " + bmtTaskList.indexOf(bmtTask) + " added");
+			notifyBmtTaskSpecChanged(bmtTask, bmtTaskList.indexOf(bmtTask), bmtTaskList);
 			break;
 		case BTT:
 			BttTask bttTask = (BttTask) task;
 			bttTaskList.add(bttTask);
 			Collections.sort(bttTaskList);
-			logg.globalLogging(taskListName,
-					CompetitionIdentifier.BTT + bttTask.getString() + " no. "
-							+ bttTaskList.indexOf(bttTask) + " added");
-			notifyBttTaskSpecChanged(bttTask, bttTaskList.indexOf(bttTask),
-					bttTaskList);
+			logg.globalLogging(taskListName, CompetitionIdentifier.BTT + bttTask.getString() + " no. " + bttTaskList.indexOf(bttTask) + " added");
+			notifyBttTaskSpecChanged(bttTask, bttTaskList.indexOf(bttTask), bttTaskList);
 			break;
 		case CTT:
 			CttTask cttTask = (CttTask) task;
 			cttTaskList.add(cttTask);
 			Collections.sort(cttTaskList);
-			logg.globalLogging(taskListName,
-					CompetitionIdentifier.BTT + cttTask.getString() + " no. "
-							+ bttTaskList.indexOf(cttTask) + " added");
-			notifyCttTaskSpecChanged(cttTask, cttTaskList.indexOf(cttTask),
-					cttTaskList);
+			logg.globalLogging(taskListName, CompetitionIdentifier.BTT + cttTask.getString() + " no. " + bttTaskList.indexOf(cttTask) + " added");
+			notifyCttTaskSpecChanged(cttTask, cttTaskList.indexOf(cttTask), cttTaskList);
 			break;
 		default:
 			return;
@@ -264,30 +237,25 @@ public class TaskSpec {
 		switch (compIdent) {
 		case BNT:
 			BntTask bntTask = bntTaskList.remove(pos);
-			logg.globalLogging(taskListName, CompetitionIdentifier.BNT
-					+ bntTask.getString() + " no. " + pos + " deleted");
+			logg.globalLogging(taskListName, CompetitionIdentifier.BNT + bntTask.getString() + " no. " + pos + " deleted");
 			notifyBntTaskSpecChanged(bntTask, pos, bntTaskList);
 			return bntTask;
 		case BMT:
 			BmtTask bmtTask = bmtTaskList.remove(pos);
-			logg.globalLogging(taskListName, CompetitionIdentifier.BMT
-					+ bmtTask.getString() + " no. " + pos + " deleted");
+			logg.globalLogging(taskListName, CompetitionIdentifier.BMT + bmtTask.getString() + " no. " + pos + " deleted");
 			notifyBmtTaskSpecChanged(bmtTask, pos, bmtTaskList);
 			return bmtTask;
 		case BTT:
 			BttTask bttTask = bttTaskList.remove(pos);
 			Collections.sort(bttTaskList);
-			logg.globalLogging(taskListName, CompetitionIdentifier.CTT
-					+ bttTask.getString() + " no. " + pos + " deleted");
+			logg.globalLogging(taskListName, CompetitionIdentifier.CTT + bttTask.getString() + " no. " + pos + " deleted");
 			notifyBttTaskSpecChanged(bttTask, pos, bttTaskList);
 			return bttTask;
 		case CTT:
 			CttTask cttTask = cttTaskList.remove(pos);
-			logg.globalLogging(taskListName, CompetitionIdentifier.CTT
-					+ "not implemented yet");
+			logg.globalLogging(taskListName, CompetitionIdentifier.CTT + "not implemented yet");
 			Collections.sort(cttTaskList);
-			logg.globalLogging(taskListName, CompetitionIdentifier.CTT
-					+ cttTask.getString() + " no. " + pos + " deleted");
+			logg.globalLogging(taskListName, CompetitionIdentifier.CTT + cttTask.getString() + " no. " + pos + " deleted");
 			notifyCttTaskSpecChanged(cttTask, pos, cttTaskList);
 			return cttTask;
 		default:
@@ -304,39 +272,27 @@ public class TaskSpec {
 			case BNT:
 				BntTask bntTask = bntTaskList.remove(pos);
 				bntTaskList.add(pos - 1, bntTask);
-				logg.globalLogging(taskListName,
-						CompetitionIdentifier.BNT + bntTask.getString()
-						+ " no. " + bntTaskList.indexOf(bntTask)
-						+ " moved up");
+				logg.globalLogging(taskListName, CompetitionIdentifier.BNT + bntTask.getString() + " no. " + bntTaskList.indexOf(bntTask) + " moved up");
 				notifyBntTaskSpecChanged(bntTask, pos, bntTaskList);
 				return bntTask;
 			case BMT:
 				BmtTask bmtTask = bmtTaskList.remove(pos);
 				bmtTaskList.add(pos - 1, bmtTask);
-				logg.globalLogging(taskListName,
-						CompetitionIdentifier.BMT + bmtTask.getString()
-						+ " no. " + bmtTaskList.indexOf(bmtTask)
-						+ " moved up");
+				logg.globalLogging(taskListName, CompetitionIdentifier.BMT + bmtTask.getString() + " no. " + bmtTaskList.indexOf(bmtTask) + " moved up");
 				notifyBmtTaskSpecChanged(bmtTask, pos, bmtTaskList);
 				return bmtTask;
 			case BTT:
 				BttTask bttTask = bttTaskList.remove(pos);
 				bttTaskList.add(pos - 1, bttTask);
 				Collections.sort(bttTaskList);
-				logg.globalLogging(taskListName,
-						CompetitionIdentifier.BTT + bttTask.getString()
-						+ " no. " + bttTaskList.indexOf(bttTask)
-						+ " moved up");
+				logg.globalLogging(taskListName, CompetitionIdentifier.BTT + bttTask.getString() + " no. " + bttTaskList.indexOf(bttTask) + " moved up");
 				notifyBttTaskSpecChanged(bttTask, pos, bttTaskList);
 				return bttTask;
 			case CTT:
 				CttTask cttTask = cttTaskList.remove(pos);
 				cttTaskList.add(pos - 1, cttTask);
 				Collections.sort(cttTaskList);
-				logg.globalLogging(taskListName,
-						CompetitionIdentifier.CTT + cttTask.getString()
-						+ " no. " + cttTaskList.indexOf(cttTask)
-						+ " moved up");
+				logg.globalLogging(taskListName, CompetitionIdentifier.CTT + cttTask.getString() + " no. " + cttTaskList.indexOf(cttTask) + " moved up");
 				notifyCttTaskSpecChanged(cttTask, pos, cttTaskList);
 				return cttTask;
 			default:
@@ -352,9 +308,7 @@ public class TaskSpec {
 				return null;
 			BntTask bntTask = bntTaskList.remove(pos);
 			bntTaskList.add(pos + 1, bntTask);
-			logg.globalLogging(taskListName,
-					CompetitionIdentifier.BNT + bntTask.getString() + " no. "
-							+ bntTaskList.indexOf(bntTask) + " moved down");
+			logg.globalLogging(taskListName, CompetitionIdentifier.BNT + bntTask.getString() + " no. " + bntTaskList.indexOf(bntTask) + " moved down");
 			notifyBntTaskSpecChanged(bntTask, pos, bntTaskList);
 			return bntTask;
 		case BMT:
@@ -362,9 +316,7 @@ public class TaskSpec {
 				return null;
 			BmtTask bmtTask = bmtTaskList.remove(pos);
 			bmtTaskList.add(pos + 1, bmtTask);
-			logg.globalLogging(taskListName,
-					CompetitionIdentifier.BMT + bmtTask.getString() + " no. "
-							+ bmtTaskList.indexOf(bmtTask) + " moved down");
+			logg.globalLogging(taskListName, CompetitionIdentifier.BMT + bmtTask.getString() + " no. " + bmtTaskList.indexOf(bmtTask) + " moved down");
 			notifyBmtTaskSpecChanged(bmtTask, pos, bmtTaskList);
 			return bmtTask;
 		case BTT:
@@ -373,9 +325,7 @@ public class TaskSpec {
 			BttTask bttTask = bttTaskList.remove(pos);
 			bttTaskList.add(pos + 1, bttTask);
 			Collections.sort(bttTaskList);
-			logg.globalLogging(taskListName,
-					CompetitionIdentifier.BTT + bttTask.getString() + " no. "
-							+ bttTaskList.indexOf(bttTask) + " moved down");
+			logg.globalLogging(taskListName, CompetitionIdentifier.BTT + bttTask.getString() + " no. " + bttTaskList.indexOf(bttTask) + " moved down");
 			notifyBttTaskSpecChanged(bttTask, pos, bttTaskList);
 			return bttTask;
 		case CTT:
@@ -384,9 +334,7 @@ public class TaskSpec {
 			CttTask cttTask = cttTaskList.remove(pos);
 			cttTaskList.add(pos + 1, cttTask);
 			Collections.sort(cttTaskList);
-			logg.globalLogging(taskListName,
-					CompetitionIdentifier.BTT + cttTask.getString() + " no. "
-							+ bttTaskList.indexOf(cttTask) + " moved down");
+			logg.globalLogging(taskListName, CompetitionIdentifier.BTT + cttTask.getString() + " no. " + bttTaskList.indexOf(cttTask) + " moved down");
 			notifyCttTaskSpecChanged(cttTask, pos, cttTaskList);
 			return cttTask;
 		default:
@@ -398,37 +346,25 @@ public class TaskSpec {
 		switch (compIdent) {
 		case BNT:
 			BntTask bntTask = bntTaskList.set(pos, (BntTask) task);
-			logg.globalLogging(taskListName, CompetitionIdentifier.BNT
-					+ bntTask.getString() + " no. " + bntTaskList.indexOf(task)
-					+ " updated to " + task.getString());
-			notifyBntTaskSpecChanged(bntTask, bntTaskList.indexOf(bntTask),
-					bntTaskList);
+			logg.globalLogging(taskListName, CompetitionIdentifier.BNT + bntTask.getString() + " no. " + bntTaskList.indexOf(task) + " updated to " + task.getString());
+			notifyBntTaskSpecChanged(bntTask, bntTaskList.indexOf(bntTask), bntTaskList);
 			return bntTask;
 		case BMT:
 			BmtTask bmtTask = bmtTaskList.set(pos, (BmtTask) task);
-			logg.globalLogging(taskListName, CompetitionIdentifier.BMT
-					+ bmtTask.getString() + " no. " + bmtTaskList.indexOf(task)
-					+ " updated to " + task.getString());
-			notifyBmtTaskSpecChanged(bmtTask, bmtTaskList.indexOf(bmtTask),
-					bmtTaskList);
+			logg.globalLogging(taskListName, CompetitionIdentifier.BMT + bmtTask.getString() + " no. " + bmtTaskList.indexOf(task) + " updated to " + task.getString());
+			notifyBmtTaskSpecChanged(bmtTask, bmtTaskList.indexOf(bmtTask), bmtTaskList);
 			return bmtTask;
 		case BTT:
 			BttTask bttTask = bttTaskList.set(pos, (BttTask) task);
 			Collections.sort(bttTaskList);
-			logg.globalLogging(taskListName, CompetitionIdentifier.BTT
-					+ bttTask.getString() + " no. " + bttTaskList.indexOf(task)
-					+ " updated to " + task.getString());
-			notifyBttTaskSpecChanged(bttTask, bttTaskList.indexOf(bttTask),
-					bttTaskList);
+			logg.globalLogging(taskListName, CompetitionIdentifier.BTT + bttTask.getString() + " no. " + bttTaskList.indexOf(task) + " updated to " + task.getString());
+			notifyBttTaskSpecChanged(bttTask, bttTaskList.indexOf(bttTask), bttTaskList);
 			return bttTask;
 		case CTT:
 			CttTask cttTask = cttTaskList.set(pos, (CttTask) task);
 			Collections.sort(bttTaskList);
-			logg.globalLogging(taskListName, CompetitionIdentifier.CTT
-					+ cttTask.getString() + " no. " + bttTaskList.indexOf(task)
-					+ " updated to " + task.getString());
-			notifyCttTaskSpecChanged(cttTask, bttTaskList.indexOf(cttTask),
-					cttTaskList);
+			logg.globalLogging(taskListName, CompetitionIdentifier.CTT + cttTask.getString() + " no. " + bttTaskList.indexOf(task) + " updated to " + task.getString());
+			notifyCttTaskSpecChanged(cttTask, bttTaskList.indexOf(cttTask), cttTaskList);
 			return cttTask;
 		default:
 			return null;
@@ -463,54 +399,46 @@ public class TaskSpec {
 		listOfTaskListeners.remove(TaskListener.class, tL);
 	}
 
-	public void notifyBntTaskSpecChanged(BntTask bntTask, int pos,
-			ArrayList<BntTask> bntTaskList2) {
+	public void notifyBntTaskSpecChanged(BntTask bntTask, int pos, ArrayList<BntTask> bntTaskList2) {
 		Object[] listeners = listOfTaskListeners.getListenerList();
 		// Each listener occupies two elements - the first is the listener class
 		// and the second is the listener instance
 		for (int i = 0; i < listeners.length; i += 2) {
 			if (listeners[i] == TaskListener.class) {
-				((TaskListener) listeners[i + 1]).bntTaskSpecChanged(bntTask,
-						pos, bntTaskList);
+				((TaskListener) listeners[i + 1]).bntTaskSpecChanged(bntTask, pos, bntTaskList);
 			}
 		}
 	}
 
-	public void notifyBmtTaskSpecChanged(BmtTask bmtTask, int pos,
-			ArrayList<BmtTask> bntTaskList2) {
+	public void notifyBmtTaskSpecChanged(BmtTask bmtTask, int pos, ArrayList<BmtTask> bntTaskList2) {
 		Object[] listeners = listOfTaskListeners.getListenerList();
 		// Each listener occupies two elements - the first is the listener class
 		// and the second is the listener instance
 		for (int i = 0; i < listeners.length; i += 2) {
 			if (listeners[i] == TaskListener.class) {
-				((TaskListener) listeners[i + 1]).bmtTaskSpecChanged(bmtTask,
-						pos, bmtTaskList);
+				((TaskListener) listeners[i + 1]).bmtTaskSpecChanged(bmtTask, pos, bmtTaskList);
 			}
 		}
 	}
 
-	public void notifyBttTaskSpecChanged(BttTask bttTask, int pos,
-			ArrayList<BttTask> bttTaskList) {
+	public void notifyBttTaskSpecChanged(BttTask bttTask, int pos, ArrayList<BttTask> bttTaskList) {
 		Object[] listeners = listOfTaskListeners.getListenerList();
 		// Each listener occupies two elements - the first is the listener class
 		// and the second is the listener instance
 		for (int i = 0; i < listeners.length; i += 2) {
 			if (listeners[i] == TaskListener.class) {
-				((TaskListener) listeners[i + 1]).bttTaskSpecChanged(bttTask,
-						pos, bttTaskList);
+				((TaskListener) listeners[i + 1]).bttTaskSpecChanged(bttTask, pos, bttTaskList);
 			}
 		}
 	}
 
-	public void notifyCttTaskSpecChanged(CttTask cttTask, int pos,
-			ArrayList<CttTask> cttTaskList) {
+	public void notifyCttTaskSpecChanged(CttTask cttTask, int pos, ArrayList<CttTask> cttTaskList) {
 		Object[] listeners = listOfTaskListeners.getListenerList();
 		// Each listener occupies two elements - the first is the listener class
 		// and the second is the listener instance
 		for (int i = 0; i < listeners.length; i += 2) {
 			if (listeners[i] == TaskListener.class) {
-				((TaskListener) listeners[i + 1]).cttTaskSpecChanged(cttTask,
-						pos, cttTaskList);
+				((TaskListener) listeners[i + 1]).cttTaskSpecChanged(cttTask, pos, cttTaskList);
 			}
 		}
 	}
@@ -530,8 +458,7 @@ public class TaskSpec {
 			out.write(getTaskSpecString(CompetitionIdentifier.CTT));
 			out.write("\n");
 			out.close();
-			logg.globalLogging("TODO", "saved actual task specification in >"
-					+ file.getName() + "<");
+			logg.globalLogging("TODO", "saved actual task specification in >" + file.getName() + "<");
 		} catch (Exception e) {
 			System.err.println("Error: " + e.getMessage());
 			logg.globalLogging("TODO", "saving failed! >");
@@ -569,8 +496,7 @@ public class TaskSpec {
 		try {
 			if (competition.equals(CompetitionIdentifier.BNT.toString())) {
 				bntTaskList = new ArrayList<BntTask>();
-				Pattern pat = Pattern.compile(ValidTaskElements.getInstance()
-						.getValidBNTPattern());
+				Pattern pat = Pattern.compile(ValidTaskElements.getInstance().getValidBNTPattern());
 				Matcher m = pat.matcher(tSpecStr);
 				do {
 					BntTask nextTask = new BntTask();
@@ -579,11 +505,8 @@ public class TaskSpec {
 						nextTask.setOrientation(m.group(2));
 						nextTask.setPause(m.group(3));
 						bntTaskList.add(nextTask);
-						logg.globalLogging(taskListName, nextTask.getString()
-								+ " no. " + bntTaskList.indexOf(nextTask)
-								+ " added");
-						notifyBntTaskSpecChanged(nextTask,
-								bntTaskList.indexOf(nextTask), bntTaskList);
+						logg.globalLogging(taskListName, nextTask.getString() + " no. " + bntTaskList.indexOf(nextTask) + " added");
+						notifyBntTaskSpecChanged(nextTask, bntTaskList.indexOf(nextTask), bntTaskList);
 					}
 				} while (!m.hitEnd());
 			}
@@ -602,11 +525,8 @@ public class TaskSpec {
 					BmtTask.setPlaceFinal(tokens[tokens.length - 1]);
 					nextTask.setObject(tokens[i]);
 					bmtTaskList.add(nextTask);
-					logg.globalLogging(taskListName, nextTask.getString()
-							+ " no. " + bmtTaskList.indexOf(nextTask)
-							+ " added");
-					notifyBmtTaskSpecChanged(nextTask,
-							bmtTaskList.indexOf(nextTask), bmtTaskList);
+					logg.globalLogging(taskListName, nextTask.getString() + " no. " + bmtTaskList.indexOf(nextTask) + " added");
+					notifyBmtTaskSpecChanged(nextTask, bmtTaskList.indexOf(nextTask), bmtTaskList);
 				}
 			}
 			if (competition.equals(CompetitionIdentifier.BTT.toString())) {
@@ -617,13 +537,11 @@ public class TaskSpec {
 				String delimskomma = "[,]";
 				String[] taskspec = tSpecStr.split("[<>]");
 				if (taskspec.length > 1) {
-					String[] initgoalsituation = taskspec[1]
-							.split(delimssemicolon);
+					String[] initgoalsituation = taskspec[1].split(delimssemicolon);
 
 					for (int d = 0; d < initgoalsituation.length; d++) {
 
-						String[] tokens = initgoalsituation[d]
-								.split(delimsbracket);
+						String[] tokens = initgoalsituation[d].split(delimsbracket);
 
 						String pose;
 						String config;
@@ -654,13 +572,8 @@ public class TaskSpec {
 								nextTask.setConfiguration(config);
 								nextTask.setObject(objects[u]);
 								bttTaskList.add(nextTask);
-								logg.globalLogging(taskListName,
-										nextTask.getString() + " no. "
-												+ bttTaskList.indexOf(nextTask)
-												+ " added");
-								notifyBttTaskSpecChanged(nextTask,
-										bttTaskList.indexOf(nextTask),
-										bttTaskList);
+								logg.globalLogging(taskListName, nextTask.getString() + " no. " + bttTaskList.indexOf(nextTask) + " added");
+								notifyBttTaskSpecChanged(nextTask, bttTaskList.indexOf(nextTask), bttTaskList);
 							}
 						}
 					}
@@ -676,40 +589,41 @@ public class TaskSpec {
 				if (teams.length > 1) {
 					teams[0] = teams[0].split("[<>]")[1];
 					teams[1] = teams[1].split("[<>]")[1];
-			
-				//	for (int e = 0; e < teams.length; e++) {
-				//		System.out.println("team: "+ teams[e]);
-				//	}
+
+					// for (int e = 0; e < teams.length; e++) {
+					// System.out.println("team: "+ teams[e]);
+					// }
 					for (int e = 0; e < teams.length; e++) {
 						String[] initgoalsituation = teams[e].split(delimssemicolon);
-						//for (int f = 0; f < initgoalsituation.length; f++) {
-						//	System.out.println("initgoalsituation: "+ initgoalsituation[f]);
-						//}
+						// for (int f = 0; f < initgoalsituation.length; f++) {
+						// System.out.println("initgoalsituation: "+
+						// initgoalsituation[f]);
+						// }
 
 						for (int d = 0; d < initgoalsituation.length; d++) {
 
-							String[] tokens = initgoalsituation[d]
-									.split(delimsbracket);
-							
-						//	for (int f = 0; f < tokens.length; f++) {
-						//		System.out.println("tokens"+f+": "+ tokens[f] + "  e= "+e);
-						//	}
+							String[] tokens = initgoalsituation[d].split(delimsbracket);
+
+							// for (int f = 0; f < tokens.length; f++) {
+							// System.out.println("tokens"+f+": "+ tokens[f] +
+							// "  e= "+e);
+							// }
 
 							String pose;
 							String config;
 							String situation = "";
-							
-							if (tokens[0].contains("initial")){
-								if(e == 0){
+
+							if (tokens[0].contains("initial")) {
+								if (e == 0) {
 									situation = "initial";
-								}else{
+								} else {
 									continue;
 								}
 							}
-							if (tokens[0].contains("goal")){
-								if(e == 0){
+							if (tokens[0].contains("goal")) {
+								if (e == 0) {
 									situation = "team1Goal";
-								}else{
+								} else {
 									situation = "team2Goal";
 								}
 							}
@@ -729,19 +643,15 @@ public class TaskSpec {
 
 									// System.out.println("pose: "+ pose);
 									// System.out.println("config: "+ config);
-									// System.out.println("objects: "+ objects[u]);
+									// System.out.println("objects: "+
+									// objects[u]);
 									nextTask.setSituation(situation);
 									nextTask.setPlace(pose);
 									nextTask.setConfiguration(config);
 									nextTask.setObject(objects[u]);
 									cttTaskList.add(nextTask);
-									logg.globalLogging(taskListName,
-											nextTask.getString() + " no. "
-													+ cttTaskList.indexOf(nextTask)
-													+ " added");
-									notifyCttTaskSpecChanged(nextTask,
-											cttTaskList.indexOf(nextTask),
-											cttTaskList);
+									logg.globalLogging(taskListName, nextTask.getString() + " no. " + cttTaskList.indexOf(nextTask) + " added");
+									notifyCttTaskSpecChanged(nextTask, cttTaskList.indexOf(nextTask), cttTaskList);
 								}
 							}
 						}
@@ -749,15 +659,13 @@ public class TaskSpec {
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("Caught exception in parseTaskSpec. Error: "
-					+ e.getMessage());
+			System.out.println("Caught exception in parseTaskSpec. Error: " + e.getMessage());
 			return false;
 		}
 		return true;
 	}
 
-	public void setTaskState(int tripletIndex, int column,
-			CompetitionIdentifier compIdent) {
+	public void setTaskState(int tripletIndex, int column, CompetitionIdentifier compIdent) {
 		Task tT = getTaskAtIndex(tripletIndex, compIdent);
 		StateOfTask newState;
 		if (column == 1)
@@ -770,39 +678,23 @@ public class TaskSpec {
 			tT.setState(newState);
 		switch (compIdent) {
 		case BNT:
-			logg.globalLogging(taskListName,
-					CompetitionIdentifier.BNT + tT.getString() + " no. "
-							+ tripletIndex + " new state: " + tT.getState());
-			logg.competitionLogging(taskListName, CompetitionIdentifier.BNT
-					+ tT.getString() + " no. " + tripletIndex + " new state: "
-					+ tT.getState());
+			logg.globalLogging(taskListName, CompetitionIdentifier.BNT + tT.getString() + " no. " + tripletIndex + " new state: " + tT.getState());
+			logg.competitionLogging(taskListName, CompetitionIdentifier.BNT + tT.getString() + " no. " + tripletIndex + " new state: " + tT.getState());
 			notifyBntTaskSpecChanged(((BntTask) tT), column, bntTaskList);
 			break;
 		case BMT:
-			logg.globalLogging(taskListName,
-					CompetitionIdentifier.BMT + tT.getString() + " no. "
-							+ tripletIndex + " new state: " + tT.getState());
-			logg.competitionLogging(taskListName, CompetitionIdentifier.BMT
-					+ tT.getString() + " no. " + tripletIndex + " new state: "
-					+ tT.getState());
+			logg.globalLogging(taskListName, CompetitionIdentifier.BMT + tT.getString() + " no. " + tripletIndex + " new state: " + tT.getState());
+			logg.competitionLogging(taskListName, CompetitionIdentifier.BMT + tT.getString() + " no. " + tripletIndex + " new state: " + tT.getState());
 			notifyBmtTaskSpecChanged(((BmtTask) tT), column, bmtTaskList);
 			break;
 		case BTT:
-			logg.globalLogging(taskListName,
-					CompetitionIdentifier.BTT + tT.getString() + " no. "
-							+ tripletIndex + " new state: " + tT.getState());
-			logg.competitionLogging(taskListName, CompetitionIdentifier.BTT
-					+ tT.getString() + " no. " + tripletIndex + " new state: "
-					+ tT.getState());
+			logg.globalLogging(taskListName, CompetitionIdentifier.BTT + tT.getString() + " no. " + tripletIndex + " new state: " + tT.getState());
+			logg.competitionLogging(taskListName, CompetitionIdentifier.BTT + tT.getString() + " no. " + tripletIndex + " new state: " + tT.getState());
 			notifyBttTaskSpecChanged(((BttTask) tT), column, bttTaskList);
 			break;
 		case CTT:
-			logg.globalLogging(taskListName,
-					CompetitionIdentifier.BNT + tT.getString() + " no. "
-							+ tripletIndex + " new state: " + tT.getState());
-			logg.competitionLogging(taskListName, CompetitionIdentifier.BNT
-					+ tT.getString() + " no. " + tripletIndex + " new state: "
-					+ tT.getState());
+			logg.globalLogging(taskListName, CompetitionIdentifier.CTT + tT.getString() + " no. " + tripletIndex + " new state: " + tT.getState());
+			logg.competitionLogging(taskListName, CompetitionIdentifier.CTT + tT.getString() + " no. " + tripletIndex + " new state: " + tT.getState());
 			notifyCttTaskSpecChanged(((CttTask) tT), column, cttTaskList);
 			break;
 		default:

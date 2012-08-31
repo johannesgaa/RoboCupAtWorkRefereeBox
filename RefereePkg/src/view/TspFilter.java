@@ -1,12 +1,12 @@
 package view;
 
 import java.io.File;
-
 import javax.swing.filechooser.FileFilter;
 
 class TspFilter extends FileFilter {
 
 	// Accept all directories and tsp files.
+  @Override
 	public boolean accept(File f) {
 		if (f.isDirectory()) {
 			return true;
@@ -27,6 +27,7 @@ class TspFilter extends FileFilter {
 	}
 
 	// The description of this filter
+  @Override
 	public String getDescription() {
 		return "TaskSpecification";
 	}

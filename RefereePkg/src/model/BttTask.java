@@ -1,6 +1,7 @@
 package model;
 
 public class BttTask extends Task implements Comparable<BttTask> {
+
 	private String situation;
 	private String configuration;
 	private String place;
@@ -25,8 +26,7 @@ public class BttTask extends Task implements Comparable<BttTask> {
 	}
 
 	// init bmttask
-	public BttTask(String situation, String configuration, String place,
-			String object) {
+	public BttTask(String situation, String configuration, String place, String object) {
 		this.situation = situation;
 		this.configuration = configuration;
 		this.place = place;
@@ -39,10 +39,11 @@ public class BttTask extends Task implements Comparable<BttTask> {
 	}
 
 	public String getConfiguration() {
-		if (configuration.equals(" "))
-			return new String("");
-		else
+		if (configuration.equals(" ")) {
+			return "";
+		} else {
 			return configuration;
+		}
 	}
 
 	public String getObject() {
@@ -57,13 +58,13 @@ public class BttTask extends Task implements Comparable<BttTask> {
 		this.object = object;
 	}
 
+	@Override
 	public String getString() {
-		if (configuration.equals(" "))
-			return (new String("(" + situation + "," + place + "," + object
-					+ ")"));
-		else
-			return (new String("(" + situation + "," + place + ","
-					+ configuration + "," + object + ")"));
+		if (configuration.equals(" ")) {
+			return ("(" + situation + "," + place + "," + object + ")");
+		} else {
+			return ("(" + situation + "," + place + "," + configuration + "," + object + ")");
+		}
 	}
 
 	public void setSituation(String situation) {
@@ -78,11 +79,13 @@ public class BttTask extends Task implements Comparable<BttTask> {
 	public int compareTo(BttTask bttTask) {
 
 		int i = bttTask.situation.compareTo(this.situation);
-		if (i != 0)
+		if (i != 0) {
 			return i;
+		}
 		i = this.configuration.compareTo(bttTask.configuration);
-		if (i != 0)
+		if (i != 0) {
 			return i;
+		}
 		i = this.place.compareTo(bttTask.place);
 		// if (i != 0)
 		return i;

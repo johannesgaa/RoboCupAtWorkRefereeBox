@@ -1,5 +1,8 @@
 package view;
 
+import controller.ConnectionListener;
+import controller.TaskListener;
+import controller.TimerListener;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -9,7 +12,6 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.ArrayList;
-
 import javax.swing.Action;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -33,19 +35,13 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-
-import view.CompetitionPanel.SequenceTableModel;
-
 import model.BmtTask;
 import model.BntTask;
 import model.BttTask;
 import model.CompetitionIdentifier;
 import model.CttTask;
 import model.Task;
-import controller.ConnectionListener;
-import controller.TaskListener;
-import controller.TimerListener;
+import view.CompetitionPanel.SequenceTableModel;
 
 /**
  * This code was edited or generated using CloudGarden's Jigloo
@@ -66,8 +62,7 @@ import controller.TimerListener;
  * 
  * @author BRSU-MAS-ASTT-SoSe2012
  */
-public class MainGUI extends JFrame implements TaskListener,
-		ConnectionListener, TimerListener {
+public class MainGUI extends JFrame implements TaskListener, ConnectionListener, TimerListener {
 	private static final long serialVersionUID = 1L;
 	private static final int GAP = 10;
 	private JPanel statusPanel;
@@ -122,8 +117,7 @@ public class MainGUI extends JFrame implements TaskListener,
 	/** Default constructor */
 	public MainGUI(int num) {
 		try {
-			UIManager.setLookAndFeel(UIManager
-					.getCrossPlatformLookAndFeelClassName());
+			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -154,26 +148,20 @@ public class MainGUI extends JFrame implements TaskListener,
 		tabbedPane = new JTabbedPane();
 		competitionPanel = new CompetitionPanel[NUMBEROFCOMPETITIONS];
 		competitionPanel[0] = new BntPanel(new BorderLayout());
-		tabbedPane.addTab(CompetitionIdentifier.values()[0].name(),
-				competitionPanel[0]);
+		tabbedPane.addTab(CompetitionIdentifier.values()[0].name(), competitionPanel[0]);
 		competitionPanel[1] = new BmtPanel(new BorderLayout());
-		tabbedPane.addTab(CompetitionIdentifier.values()[1].name(),
-				competitionPanel[1]);
+		tabbedPane.addTab(CompetitionIdentifier.values()[1].name(), competitionPanel[1]);
 		competitionPanel[2] = new BttPanel(new BorderLayout());
-		tabbedPane.addTab(CompetitionIdentifier.values()[2].name(),
-				competitionPanel[2]);
+		tabbedPane.addTab(CompetitionIdentifier.values()[2].name(), competitionPanel[2]);
 		competitionPanel[3] = new CttPanel(new BorderLayout());
-		tabbedPane.addTab(CompetitionIdentifier.values()[3].name(),
-				competitionPanel[3]);
+		tabbedPane.addTab(CompetitionIdentifier.values()[3].name(), competitionPanel[3]);
 		westPanel.add(tabbedPane, BorderLayout.CENTER);
 	}
 
 	private void createUpperServerPanel() {
 		upperServerPanel = new JPanel();
-		upperServerPanel.setLayout(new BoxLayout(upperServerPanel,
-				javax.swing.BoxLayout.LINE_AXIS));
-		connectedIcon = new JLabel(new ImageIcon(getClass().getResource(
-				"/view/resources/icons/status-busy.png")));
+		upperServerPanel.setLayout(new BoxLayout(upperServerPanel, javax.swing.BoxLayout.LINE_AXIS));
+		connectedIcon = new JLabel(new ImageIcon(getClass().getResource("/view/resources/icons/status-busy.png")));
 		upperServerPanel.add(connectedIcon);
 		connectedLabel = new JLabel();
 		connectedLabel.setText(noTeam);
@@ -183,8 +171,7 @@ public class MainGUI extends JFrame implements TaskListener,
 
 	private void createMiddleServerPanel() {
 		middleServerPanel = new JPanel();
-		middleServerPanel.setLayout(new BoxLayout(middleServerPanel,
-				javax.swing.BoxLayout.LINE_AXIS));
+		middleServerPanel.setLayout(new BoxLayout(middleServerPanel, javax.swing.BoxLayout.LINE_AXIS));
 		disconnectButton = new JButton();
 		disconnectButton.setEnabled(false);
 		disconnectButton.setHorizontalAlignment(SwingConstants.LEFT);
@@ -199,8 +186,7 @@ public class MainGUI extends JFrame implements TaskListener,
 
 	private void createLowerServerPanel() {
 		lowerServerPanel = new JPanel();
-		lowerServerPanel.setLayout(new BoxLayout(lowerServerPanel,
-				javax.swing.BoxLayout.LINE_AXIS));
+		lowerServerPanel.setLayout(new BoxLayout(lowerServerPanel, javax.swing.BoxLayout.LINE_AXIS));
 		timerStartStopButton = new JToggleButton("Timer Start");
 		timerStartStopButton.setEnabled(false);
 		timerStartStopButton.setAlignmentX(SwingConstants.LEFT);
@@ -227,8 +213,7 @@ public class MainGUI extends JFrame implements TaskListener,
 
 	private void createServerPanelInWestPanel() {
 		serverPanel = new JPanel();
-		serverPanel.setLayout(new BoxLayout(serverPanel,
-				javax.swing.BoxLayout.PAGE_AXIS));
+		serverPanel.setLayout(new BoxLayout(serverPanel, javax.swing.BoxLayout.PAGE_AXIS));
 		// serverPanel.add(Box.createVerticalStrut(GAP));
 		// serverPanel.add(new JSeparator());
 		serverPanel.add(Box.createVerticalStrut(GAP));
@@ -525,14 +510,13 @@ public class MainGUI extends JFrame implements TaskListener,
 	 */
 	public File showFolderDialog(FileType fType, DialogType diagType) {
 		JFileChooser fc = new JFileChooser();
-		if (fType == FileType.FILETYPE_TSP)
+		if (fType == FileType.FILETYPE_TSP) {
 			fc.setFileFilter(new TspFilter());
-		if (diagType == DialogType.DIALOG_SAVE
-				&& fc.showSaveDialog(contentPanel) == JFileChooser.APPROVE_OPTION) {
+		}
+		if (diagType == DialogType.DIALOG_SAVE && fc.showSaveDialog(contentPanel) == JFileChooser.APPROVE_OPTION) {
 			return fc.getSelectedFile();
 		}
-		if (diagType == DialogType.DIALOG_OPEN
-				&& fc.showOpenDialog(contentPanel) == JFileChooser.APPROVE_OPTION) {
+		if (diagType == DialogType.DIALOG_OPEN && fc.showOpenDialog(contentPanel) == JFileChooser.APPROVE_OPTION) {
 			return fc.getSelectedFile();
 		}
 		return null;
@@ -559,8 +543,7 @@ public class MainGUI extends JFrame implements TaskListener,
 	 * @return An integer representing the option selected by the user.
 	 */
 	public int getUserConfirmation(String message, String title) {
-		return JOptionPane.showConfirmDialog(this, message, title,
-				JOptionPane.YES_NO_OPTION);
+		return JOptionPane.showConfirmDialog(this, message, title, JOptionPane.YES_NO_OPTION);
 	}
 
 	/**
@@ -573,8 +556,7 @@ public class MainGUI extends JFrame implements TaskListener,
 	 *            A string representing the title of the dialog.
 	 */
 	public void showMessageDialog(String message, String title) {
-		JOptionPane.showMessageDialog(this, message, title,
-				JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(this, message, title, JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	/**
@@ -630,6 +612,7 @@ public class MainGUI extends JFrame implements TaskListener,
 	 * @param teamName
 	 *            A string containing the name of the team that has connected.
 	 */
+	@Override
 	public void teamConnected(String teamName) {
 		if (!(connectedLabel.getText().equals(noTeam))) {
 			String s = connectedLabel.getText();
@@ -640,8 +623,7 @@ public class MainGUI extends JFrame implements TaskListener,
 			connectedLabel.setText(teamName);
 		}
 		disconnectButton.setEnabled(true);
-		connectedIcon.setIcon(new ImageIcon(getClass().getResource(
-				"/view/resources/icons/status.png")));
+		connectedIcon.setIcon(new ImageIcon(getClass().getResource("/view/resources/icons/status.png")));
 
 		if (timerStartStopButton.getText().equals("Timer Stop")) {
 			sendTripletsButton.setEnabled(true);
@@ -649,14 +631,15 @@ public class MainGUI extends JFrame implements TaskListener,
 	}
 
 	/** Update the view after a team disconnected. */
+	@Override
 	public void teamDisconnected() {
 		disconnectButton.setEnabled(false);
-		connectedIcon.setIcon(new ImageIcon(getClass().getResource(
-				"/view/resources/icons/status-busy.png")));
+		connectedIcon.setIcon(new ImageIcon(getClass().getResource("/view/resources/icons/status-busy.png")));
 		connectedLabel.setText(noTeam);
 	}
 
 	/** Update the view after task specification has been sent to the team. */
+	@Override
 	public void taskSpecSent() {
 		sendTripletsButton.setEnabled(false);
 		disconnectButton.setEnabled(false);
@@ -721,14 +704,10 @@ public class MainGUI extends JFrame implements TaskListener,
 	 *            and false if otherwise.
 	 */
 
-	public void setCompetitionMode(Boolean enable,
-			CompetitionIdentifier compIdent) {
-		JTable compTable = competitionPanel[compIdent.ordinal()]
-				.getSequenceTable();
-		SequenceTableModel compTableModel = competitionPanel[compIdent
-				.ordinal()].getSequenceTableModel();
-		DefaultTableCellRenderer compTableRend = competitionPanel[compIdent
-				.ordinal()].getTableCellRenderer();
+	public void setCompetitionMode(Boolean enable, CompetitionIdentifier compIdent) {
+		JTable compTable = competitionPanel[compIdent.ordinal()].getSequenceTable();
+		SequenceTableModel compTableModel = competitionPanel[compIdent.ordinal()].getSequenceTableModel();
+		DefaultTableCellRenderer compTableRend = competitionPanel[compIdent.ordinal()].getTableCellRenderer();
 		if (enable) {
 			if (compTable.getColumnCount() == 1) {
 				compTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -736,8 +715,7 @@ public class MainGUI extends JFrame implements TaskListener,
 				compTableModel.addColumn("Failed");
 				compTable.getColumn("Subgoals").setCellRenderer(compTableRend);
 				compTableRend.setHorizontalAlignment(JLabel.CENTER);
-				Component[] comp = competitionPanel[compIdent.ordinal()]
-						.getEastPanel().getComponents();
+				Component[] comp = competitionPanel[compIdent.ordinal()].getEastPanel().getComponents();
 				for (int i = comp.length - 1; i >= comp.length - 11; i--) {
 					// don't change the glues! if
 					comp[i].setEnabled(false);
@@ -749,20 +727,19 @@ public class MainGUI extends JFrame implements TaskListener,
 				sendTripletsButton.setEnabled(true);
 			}
 			for (int i = 0; i < competitionPanel.length; i++) {
-				if (i != compIdent.ordinal())
+				if (i != compIdent.ordinal()) {
 					tabbedPane.setEnabledAt(i, false);
+				}
 			}
-			if(openButton.isEnabled()){
+			if (openButton.isEnabled()) {
 				openButton.setEnabled(false);
 				openFileMenuItem.setEnabled(false);
 			}
 		} else {
 			compTableModel.setColumnCount(1);
 			compTable.getColumn("Subgoals").setCellRenderer(compTableRend);
-			competitionPanel[compIdent.ordinal()].getTableCellRenderer()
-					.setHorizontalAlignment(JLabel.CENTER);
-			Component[] comp = competitionPanel[compIdent.ordinal()]
-					.getEastPanel().getComponents();
+			competitionPanel[compIdent.ordinal()].getTableCellRenderer().setHorizontalAlignment(JLabel.CENTER);
+			Component[] comp = competitionPanel[compIdent.ordinal()].getEastPanel().getComponents();
 			for (int i = comp.length - 1; i >= comp.length - 11; i--) {
 				// don't change the glues!
 				if (comp[i].getPreferredSize().width != 0) {
@@ -777,8 +754,7 @@ public class MainGUI extends JFrame implements TaskListener,
 			openFileMenuItem.setEnabled(true);
 		}
 		compTable.getColumnModel().getColumn(0).setPreferredWidth(180);
-		competitionPanel[compIdent.ordinal()].getSequenceTableScrollPane()
-				.setPreferredSize(compTable.getPreferredSize());
+		competitionPanel[compIdent.ordinal()].getSequenceTableScrollPane().setPreferredSize(compTable.getPreferredSize());
 		this.validate();
 	}
 
@@ -796,16 +772,15 @@ public class MainGUI extends JFrame implements TaskListener,
 		}
 	}
 
-	public void setTableCellCorrected(int row, int column,
-			CompetitionIdentifier compIdent) {
+	public void setTableCellCorrected(int row, int column, CompetitionIdentifier compIdent) {
 		// competitionPanel[compIdent.ordinal()].getSequenceTableModel().setValueAt(true,
 		// row, column);
-		if (column == 1)
-			competitionPanel[compIdent.ordinal()].getSequenceTableModel()
-					.setValueAt(Boolean.FALSE, row, 2);
-		if (column == 2)
-			competitionPanel[compIdent.ordinal()].getSequenceTableModel()
-					.setValueAt(Boolean.FALSE, row, 1);
+		if (column == 1) {
+			competitionPanel[compIdent.ordinal()].getSequenceTableModel().setValueAt(Boolean.FALSE, row, 2);
+		}
+		if (column == 2) {
+			competitionPanel[compIdent.ordinal()].getSequenceTableModel().setValueAt(Boolean.FALSE, row, 1);
+		}
 		competitionPanel[compIdent.ordinal()].getSequenceTable().repaint();
 	}
 
@@ -833,10 +808,11 @@ public class MainGUI extends JFrame implements TaskListener,
 
 	@Override
 	public void timerTick(String currentTime, boolean inTime) {
-		if (inTime)
+		if (inTime) {
 			timerLabel.setForeground(Color.black);
-		else
+		} else {
 			timerLabel.setForeground(Color.red);
+		}
 		timerLabel.setText(currentTime);
 	}
 
@@ -858,8 +834,9 @@ public class MainGUI extends JFrame implements TaskListener,
 	}
 
 	public CompetitionPanel getCompetitionPanel(int i) {
-		if (competitionPanel.length > i)
+		if (competitionPanel.length > i) {
 			return competitionPanel[i];
+		}
 		return null;
 	}
 
@@ -880,32 +857,24 @@ public class MainGUI extends JFrame implements TaskListener,
 	 *            triplets.
 	 */
 	@Override
-	public void bntTaskSpecChanged(BntTask bntTask, int pos,
-			ArrayList<BntTask> bntTaskList) {
-		((BntPanel) competitionPanel[CompetitionIdentifier.BNT.ordinal()])
-				.taskSpecChanged(bntTaskList);
+	public void bntTaskSpecChanged(BntTask bntTask, int pos, ArrayList<BntTask> bntTaskList) {
+		((BntPanel) competitionPanel[CompetitionIdentifier.BNT.ordinal()]).taskSpecChanged(bntTaskList);
 	}
 
 	@Override
-	public void bmtTaskSpecChanged(BmtTask bmtTask, int pos,
-			ArrayList<BmtTask> bmtTaskList) {
-		((BmtPanel) competitionPanel[CompetitionIdentifier.BMT.ordinal()])
-				.taskSpecChanged(bmtTaskList);
+	public void bmtTaskSpecChanged(BmtTask bmtTask, int pos, ArrayList<BmtTask> bmtTaskList) {
+		((BmtPanel) competitionPanel[CompetitionIdentifier.BMT.ordinal()]).taskSpecChanged(bmtTaskList);
 
 	}
 
 	@Override
-	public void bttTaskSpecChanged(BttTask bttTask, int pos,
-			ArrayList<BttTask> bttTaskList) {
-		((BttPanel) competitionPanel[CompetitionIdentifier.BTT.ordinal()])
-				.taskSpecChanged(bttTaskList);
+	public void bttTaskSpecChanged(BttTask bttTask, int pos, ArrayList<BttTask> bttTaskList) {
+		((BttPanel) competitionPanel[CompetitionIdentifier.BTT.ordinal()]).taskSpecChanged(bttTaskList);
 	}
 
 	@Override
-	public void cttTaskSpecChanged(CttTask cttTask, int pos,
-			ArrayList<CttTask> cttTaskList) {
-		((CttPanel) competitionPanel[CompetitionIdentifier.CTT.ordinal()])
-				.taskSpecChanged(cttTaskList);
+	public void cttTaskSpecChanged(CttTask cttTask, int pos, ArrayList<CttTask> cttTaskList) {
+		((CttPanel) competitionPanel[CompetitionIdentifier.CTT.ordinal()]).taskSpecChanged(cttTaskList);
 	}
 
 	public JTabbedPane getTabbedPane() {

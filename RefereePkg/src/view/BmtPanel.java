@@ -6,15 +6,12 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-
 import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
 import model.BmtTask;
-import model.BntTask;
 import model.Task;
 
 public class BmtPanel extends CompetitionPanel {
@@ -102,8 +99,7 @@ public class BmtPanel extends CompetitionPanel {
 	 *            A set of valid place labels and their pixel positions.
 	 */
 	public void setValidConfigurations(List<String> configuration) {
-		configurationCbm = new DefaultComboBoxModel<String>(
-				configuration.toArray(new String[configuration.size()]));
+		configurationCbm = new DefaultComboBoxModel<String>(configuration.toArray(new String[configuration.size()]));
 		configurationBox.setModel(configurationCbm);
 	}
 
@@ -114,8 +110,7 @@ public class BmtPanel extends CompetitionPanel {
 	 *            A list of strings representing valid orientations.
 	 */
 	public void setValidObjects(List<String> object) {
-		objectCbm = new DefaultComboBoxModel<String>(
-				object.toArray(new String[object.size()]));
+		objectCbm = new DefaultComboBoxModel<String>(object.toArray(new String[object.size()]));
 		objectBox.setModel(objectCbm);
 	}
 
@@ -123,23 +118,23 @@ public class BmtPanel extends CompetitionPanel {
 		sequenceTableModel.clearColumn(0);
 		sequenceTableModel.setRowCount(bmtTaskList.size());
 		for (int i = 0; i < bmtTaskList.size(); i++) {
-			sequenceTableModel.setValueAt(
-					((Task) bmtTaskList.get(i)).getString(), i, 0);
+			sequenceTableModel.setValueAt(((Task) bmtTaskList.get(i)).getString(), i, 0);
 		}
 	}
 
+  @Override
 	public BmtTask getSelectedTask() {
 		BmtTask t = new BmtTask();
 		BmtTask.setPlaceInitial((String) placeInitialBox.getSelectedItem());
 		BmtTask.setPlaceSource((String) placeSourceBox.getSelectedItem());
-		BmtTask.setPlaceDestination((String) placeDestinationBox
-				.getSelectedItem());
+		BmtTask.setPlaceDestination((String) placeDestinationBox.getSelectedItem());
 		BmtTask.setPlaceFinal((String) placeFinalBox.getSelectedItem());
 		t.setConfiguration((String) configurationBox.getSelectedItem());
 		t.setObject((String) objectBox.getSelectedItem());
 		return t;
 	}
 
+  @Override
 	public void setTaskBoxSected(Task task) {
 		placeInitialCbm.setSelectedItem(BmtTask.getPlaceInitial());
 		placeSourceCbm.setSelectedItem(BmtTask.getPlaceSource());

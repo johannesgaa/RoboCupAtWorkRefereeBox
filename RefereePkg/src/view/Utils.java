@@ -19,27 +19,22 @@ public class Utils {
 		}
 		return extension;
 	}
-	
+
 	public static File correctFile(File file) {
 		String extension = getExtension(file);
-		if (extension == null
-				|| !extension.equals(Utils.getTaskspecextension())) {
+		if (extension == null || !extension.equals(Utils.getTaskspecextension())) {
 			String s = file.getName();
 			int i = s.lastIndexOf('.');
 			File newFile;
 			if (i > 0) {
-				newFile = new File(file.getParent() + File.separator
-						+ s.substring(0, i) + "."
-						+ Utils.getTaskspecextension());
+				newFile = new File(file.getParent() + File.separator + s.substring(0, i) + "." + Utils.getTaskspecextension());
 			} else {
-				newFile = new File(file.getAbsolutePath() + "."
-						+ Utils.getTaskspecextension());
+				newFile = new File(file.getAbsolutePath() + "." + Utils.getTaskspecextension());
 			}
 			file = newFile;
 		}
 		return file;
 	}
-
 
 	static String getTaskspecextension() {
 		return taskSpecExtension;

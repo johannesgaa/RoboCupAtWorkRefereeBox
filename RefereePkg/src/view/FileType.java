@@ -1,5 +1,5 @@
 package view;
 
 public enum FileType {
-FILETYPE_ALL, FILETYPE_TSP
+	FILETYPE_ALL, FILETYPE_TSP
 }

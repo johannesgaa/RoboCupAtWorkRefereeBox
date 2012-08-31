@@ -57,8 +57,7 @@ public class ValidTaskElements {
 		return allValid;
 	}
 
-	private boolean parsePositions(String str,
-			CompetitionIdentifier competitionID) {
+	private boolean parsePositions(String str, CompetitionIdentifier competitionID) {
 		boolean allValid = true;
 		LinkedHashMap<String, Point> hashMap = null;
 		if (competitionID == CompetitionIdentifier.BNT)
@@ -73,21 +72,15 @@ public class ValidTaskElements {
 		Scanner scnr = new Scanner(str).useDelimiter("(\\s*\\,\\s*)");
 		while (scnr.hasNext()) {
 			String tri = new String(scnr.next());
-			Scanner scnr1 = new Scanner(tri)
-					.useDelimiter("(\\s*[\\/|\\(|\\)]\\s*)");
+			Scanner scnr1 = new Scanner(tri).useDelimiter("(\\s*[\\/|\\(|\\)]\\s*)");
 			String s = new String(scnr1.next());
-			if (s.length() == 2 && Character.isLetter(s.charAt(0))
-					&& Character.isUpperCase(s.charAt(0))
-					&& Character.isDigit(s.charAt(1))) {
+			if (s.length() == 2 && Character.isLetter(s.charAt(0)) && Character.isUpperCase(s.charAt(0)) && Character.isDigit(s.charAt(1))) {
 				String sx = new String(scnr1.next());
 				int x = 0;
 				try {
 					x = Integer.parseInt(sx);
 				} catch (NumberFormatException e) {
-					System.out
-							.println("Invalid place label "
-									+ s
-									+ " in Config File. Place label format should be ([A-Z][0-9]).");
+					System.out.println("Invalid place label " + s + " in Config File. Place label format should be ([A-Z][0-9]).");
 					allValid = false;
 				}
 				String sy = new String(scnr1.next());
@@ -95,19 +88,13 @@ public class ValidTaskElements {
 				try {
 					y = Integer.parseInt(sy);
 				} catch (NumberFormatException e) {
-					System.out
-							.println("Invalid place label "
-									+ s
-									+ " in Config File. Place label format should be ([A-Z][0-9]).");
+					System.out.println("Invalid place label " + s + " in Config File. Place label format should be ([A-Z][0-9]).");
 					allValid = false;
 				}
 				// validBNTPositions.put(s, new Point(x, y));
 				hashMap.put(s, new Point(x, y));
 			} else {
-				System.out
-						.println("Invalid place label "
-								+ s
-								+ " in Config File. Place label format should be ([A-Z][0-9]).");
+				System.out.println("Invalid place label " + s + " in Config File. Place label format should be ([A-Z][0-9]).");
 				allValid = false;
 			}
 
@@ -117,8 +104,7 @@ public class ValidTaskElements {
 
 	private boolean populateValidPlaces(Properties props) {
 
-		return parsePositions(props.getProperty("bnt.places"),
-				CompetitionIdentifier.BNT);
+		return parsePositions(props.getProperty("bnt.places"), CompetitionIdentifier.BNT);
 	}
 
 	private boolean populateValidOrientations(Properties props) {
@@ -136,8 +122,7 @@ public class ValidTaskElements {
 				}
 			}
 			if (i == 32) {
-				System.out
-						.println("Unrecognised compass direction string " + s);
+				System.out.println("Unrecognised compass direction string " + s);
 				allValid = false;
 			}
 		}
@@ -156,8 +141,7 @@ public class ValidTaskElements {
 	}
 
 	private String[] getCompassDirectionStrings() {
-		String str = new String(
-				"N, E, S, W, NE, SE, SW, NW, NNE, ENE, ESE, SSE, SSW, WSW, WNW, NNW, NbE, EbN, EbS, SbE, SbW, WbS, WbN, NbW, NEbN, NEbE, SEbE, SEbS, SWbS, SWbW, NWbW, NWbN");
+		String str = new String("N, E, S, W, NE, SE, SW, NW, NNE, ENE, ESE, SSE, SSW, WSW, WNW, NNW, NbE, EbN, EbS, SbE, SbW, WbS, WbN, NbW, NEbN, NEbE, SEbE, SEbS, SWbS, SWbW, NWbW, NWbN");
 		String[] dir = new String[32];
 		Scanner scnr = new Scanner(str).useDelimiter("(\\, )");
 		for (int i = 0; i < 32 && scnr.hasNext(); i++) {
@@ -273,8 +257,7 @@ public class ValidTaskElements {
 	}
 
 	public LinkedHashMap<String, Point> getValidBMTPositions() {
-		parsePositions(cfgFile.getPropertyByName("bmt.places"),
-				CompetitionIdentifier.BMT);
+		parsePositions(cfgFile.getPropertyByName("bmt.places"), CompetitionIdentifier.BMT);
 		return validBMTPositions;
 	}
 
@@ -299,8 +282,7 @@ public class ValidTaskElements {
 	}
 
 	public LinkedHashMap<String, Point> getValidBTTPositions() {
-		parsePositions(cfgFile.getPropertyByName("btt.places"),
-				CompetitionIdentifier.BTT);
+		parsePositions(cfgFile.getPropertyByName("btt.places"), CompetitionIdentifier.BTT);
 		return validBTTPositions;
 	}
 
@@ -337,8 +319,7 @@ public class ValidTaskElements {
 	}
 
 	public LinkedHashMap<String, Point> getValidCTTPositions() {
-		parsePositions(cfgFile.getPropertyByName("ctt.places"),
-				CompetitionIdentifier.CTT);
+		parsePositions(cfgFile.getPropertyByName("ctt.places"), CompetitionIdentifier.CTT);
 		return validCTTPositions;
 	}
 

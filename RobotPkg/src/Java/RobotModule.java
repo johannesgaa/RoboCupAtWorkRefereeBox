@@ -1,10 +1,10 @@
-package Java;
+
 
 
 public class RobotModule {
-	private static String serverIP = new String("127.0.1.1");
-	private static String serverPort = new String("11111");
-	private static String teamName = new String("b-it-bots");
+	private static String serverIP = "127.0.1.1";
+	private static String serverPort = "11111";
+	private static String teamName = "b-it-bots";
 	
 	public static void main(String[] args) throws Exception {
 		JavaClient jclient = new JavaClient();

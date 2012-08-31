@@ -25,8 +25,7 @@ public class CttTask extends Task implements Comparable<CttTask> {
 	}
 
 	// init bmttask
-	public CttTask(String situation, String configuration, String place,
-			String object) {
+	public CttTask(String situation, String configuration, String place, String object) {
 		this.situation = situation;
 		this.configuration = configuration;
 		this.place = place;
@@ -39,10 +38,12 @@ public class CttTask extends Task implements Comparable<CttTask> {
 	}
 
 	public String getConfiguration() {
-		if (configuration.equals(" "))
-			return new String("");
-		else
-			return configuration;
+		if (configuration.equals(" ")) {
+      return "";
+    }
+		else {
+      return configuration;
+    }
 	}
 
 	public String getObject() {
@@ -57,13 +58,14 @@ public class CttTask extends Task implements Comparable<CttTask> {
 		this.object = object;
 	}
 
+  @Override
 	public String getString() {
-		if (configuration.equals(" ") || configuration.equals(""))
-			return (new String("(" + situation + "," + place + "," + object
-					+ ")"));
-		else
-			return (new String("(" + situation + "," + place + ","
-					+ configuration + "," + object + ")"));
+		if (configuration.equals(" ") || configuration.equals("")) {
+      return ("(" + situation + "," + place + "," + object + ")");
+    }
+		else {
+      return ("(" + situation + "," + place + "," + configuration + "," + object + ")");
+    }
 	}
 
 	public void setSituation(String situation) {
@@ -78,12 +80,14 @@ public class CttTask extends Task implements Comparable<CttTask> {
 	public int compareTo(CttTask cttTask) {
 
 		int i = 0;
-			i = this.situation.compareTo(cttTask.situation);
-		if (i != 0)
-			return i;
+		i = this.situation.compareTo(cttTask.situation);
+		if (i != 0) {
+      return i;
+    }
 		i = this.configuration.compareTo(cttTask.configuration);
-		if (i != 0)
-			return i;
+		if (i != 0) {
+      return i;
+    }
 		i = this.place.compareTo(cttTask.place);
 		// if (i != 0)
 		return i;

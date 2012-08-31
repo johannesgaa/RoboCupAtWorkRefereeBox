@@ -21,9 +21,7 @@ public class BmtTask extends Task {
 	}
 
 	// init bmttask
-	public BmtTask(String placeInit, String placeSource,
-			String placeDestination, String placeFinal, String configuration,
-			String object) {
+	public BmtTask(String placeInit, String placeSource, String placeDestination, String placeFinal, String configuration, String object) {
 		BmtTask.placeInitial = placeInit;
 		BmtTask.placeSource = placeSource;
 		BmtTask.placeDestination = placeDestination;
@@ -49,8 +47,9 @@ public class BmtTask extends Task {
 		this.object = object;
 	}
 
+	@Override
 	public String getString() {
-		return (new String(object));
+		return (object);
 	}
 
 	public static String getPlaceInitial() {

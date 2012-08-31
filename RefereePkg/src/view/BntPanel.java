@@ -6,14 +6,11 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-
 import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import model.BmtTask;
 import model.BntTask;
 import model.Task;
 
@@ -81,8 +78,7 @@ public class BntPanel extends CompetitionPanel {
 	 *            A list of strings representing valid orientations.
 	 */
 	public void setValidOrientations(List<String> orientations) {
-		orientationCbm = new DefaultComboBoxModel<String>(
-				orientations.toArray(new String[orientations.size()]));
+		orientationCbm = new DefaultComboBoxModel<String>(orientations.toArray(new String[orientations.size()]));
 		orientationBox.setModel(orientationCbm);
 	}
 
@@ -94,11 +90,11 @@ public class BntPanel extends CompetitionPanel {
 	 *            A list of short integers representing valid pauses.
 	 */
 	public void setValidPauses(List<String> pauses) {
-		pauseCbm = new DefaultComboBoxModel<String>(
-				pauses.toArray(new String[pauses.size()]));
+		pauseCbm = new DefaultComboBoxModel<String>(pauses.toArray(new String[pauses.size()]));
 		pauseBox.setModel(pauseCbm);
 	}
 
+  @Override
 	public BntTask getSelectedTask() {
 		BntTask t = new BntTask();
 		t.setPlace((String) placeBox.getSelectedItem());
@@ -111,14 +107,14 @@ public class BntPanel extends CompetitionPanel {
 		sequenceTableModel.clearColumn(0);
 		sequenceTableModel.setRowCount(bntTaskList.size());
 		for (int i = 0; i < bntTaskList.size(); i++) {
-			sequenceTableModel.setValueAt(
-					((Task) bntTaskList.get(i)).getString(), i, 0);
+			sequenceTableModel.setValueAt(((Task) bntTaskList.get(i)).getString(), i, 0);
 		}
 	}
 
+  @Override
 	public void setTaskBoxSected(Task task) {
-		placeCbm.setSelectedItem(((BntTask)task).getPlace());
-		orientationCbm.setSelectedItem(((BntTask)task).getOrientation());
-		pauseCbm.setSelectedItem(((BntTask)task).getPause());
+		placeCbm.setSelectedItem(((BntTask) task).getPlace());
+		orientationCbm.setSelectedItem(((BntTask) task).getOrientation());
+		pauseCbm.setSelectedItem(((BntTask) task).getPause());
 	}
 }

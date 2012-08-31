@@ -4,13 +4,13 @@
 package model;
 
 import java.io.*;
-import java.util.Date;
 import java.text.*;
+import java.util.Date;
 
 public class Logging {
 
 	private static Logging instance = null;
-	static String logFileName = new String("RefereeSystemDefaultLog.log"); // default
+	static String logFileName = "RefereeSystemDefaultLog.log"; // default
 																			// file
 																			// name
 	private boolean competitionLoggingIsActivated = false;
@@ -56,8 +56,7 @@ public class Logging {
 			Date date = new Date();
 			BufferedWriter output;
 			output = new BufferedWriter(new FileWriter(logFile, true));
-			output.write("[" + dateformat.format(date.getTime()) + "] "
-					+ logIdentifier + ": " + args + "\n");
+			output.write("[" + dateformat.format(date.getTime()) + "] " + logIdentifier + ": " + args + "\n");
 			output.close();
 		} catch (IOException e) {
 			System.out.println("Exception caught in during File Logging: " + e);
@@ -72,8 +71,7 @@ public class Logging {
 		if (competitionLoggingIsActivated) {
 			try {
 				BufferedWriter output;
-				output = new BufferedWriter(new FileWriter(competitionLogFile,
-						true));
+				output = new BufferedWriter(new FileWriter(competitionLogFile, true));
 				output.write(logIdentifier + " " + args + "\n");
 				output.close();
 			} catch (IOException e) {
@@ -85,30 +83,22 @@ public class Logging {
 	public void setCompetitionLogging(boolean b) {
 		if (competitionLoggingIsActivated != b) {
 			if (b) {
-				DateFormat dateformat = new SimpleDateFormat(
-						"yyyy-MM-dd_HH-mm-ss");
+				DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
 				Date date = new Date();
-				System.out.println(fileParent + File.separatorChar
-						+ competitionFileName + "_"
-						+ dateformat.format(date.getTime()) + ".log");
-				competitionLogFile = new File(fileParent + File.separatorChar
-						+ competitionFileName + "_"
-						+ dateformat.format(date.getTime()) + ".log");
+				System.out.println(fileParent + File.separatorChar + competitionFileName + "_" + dateformat.format(date.getTime()) + ".log");
+				competitionLogFile = new File(fileParent + File.separatorChar + competitionFileName + "_" + dateformat.format(date.getTime()) + ".log");
 				boolean exists = competitionLogFile.exists();
 				BufferedWriter output;
 				try {
 					if (!exists) {
 						competitionLogFile.createNewFile();
 					} else {
-						output = new BufferedWriter(new FileWriter(
-								competitionLogFile));
+						output = new BufferedWriter(new FileWriter(competitionLogFile));
 						output.write("");
 						output.close();
 					}
 				} catch (IOException e) {
-					System.out
-							.println("Exception caught in setCompetitionLogging: "
-									+ e);
+					System.out.println("Exception caught in setCompetitionLogging: " + e);
 				}
 				competitionLoggingIsActivated = true;
 			} else {
@@ -127,12 +117,11 @@ public class Logging {
 
 	public void setCompetitionFileName(String fileName) {
 		if (!competitionLoggingIsActivated) {
-			if (fileName != null && fileName != "") {
+			if (fileName != null && !("".equals(fileName))) {
 				competitionFileName = fileName;
 			}
 		} else {
-			System.out
-					.println("It is not allowed to change the competition filename while the competition is still running");
+			System.out.println("It is not allowed to change the competition filename while the competition is still running");
 		}
 	}
 
@@ -154,11 +143,7 @@ public class Logging {
 	public void renameCompetitionFile() {
 		DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
 		Date date = new Date();
-		System.out.println("Rename file to: " + fileParent + File.separatorChar
-				+ teamName + "_Competition_" + competitionNo + "_"
-				+ dateformat.format(date.getTime()) + ".log");
-		competitionLogFile.renameTo(new File(fileParent + File.separatorChar
-				+ teamName + "_Competition_" + competitionNo + "_"
-				+ dateformat.format(date.getTime()) + ".log"));
+		System.out.println("Rename file to: " + fileParent + File.separatorChar + teamName + "_Competition_" + competitionNo + "_" + dateformat.format(date.getTime()) + ".log");
+		competitionLogFile.renameTo(new File(fileParent + File.separatorChar + teamName + "_Competition_" + competitionNo + "_" + dateformat.format(date.getTime()) + ".log"));
 	}
 }
