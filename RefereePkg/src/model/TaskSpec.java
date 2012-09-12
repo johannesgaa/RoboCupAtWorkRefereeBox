@@ -94,7 +94,7 @@ public class TaskSpec {
 				do {
 					s = s.concat(btt.getSituation() + "situation(");
 					do {
-						s = s.concat(btt.getPlace() + ",");
+						s = s.concat("<"+btt.getPlace() + ",");
 						s = s.concat(btt.getConfiguration() + "(");
 						do {
 							s = s.concat(btt.getObject() + ",");
@@ -106,7 +106,7 @@ public class TaskSpec {
 						} while (btt.getPlace().equals(previous.getPlace()) && (btt.getConfiguration().equals(previous.getConfiguration())));
 						s = s.substring(0, s.length() - 1); // comma is no
 						// longer needed
-						s = s.concat(")");
+						s = s.concat(")>");
 					} while (btt.getSituation().equals(previous.getSituation()));
 					s = s.concat(")");
 					if (btt.getSituation().length() != 0) {
