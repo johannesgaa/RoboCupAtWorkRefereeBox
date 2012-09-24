@@ -30,7 +30,9 @@ public class ConfigFile {
   }
 
   public void loadProperties() throws Exception {
-    try (FileInputStream in = new FileInputStream(ConfigFile.configFileFullName)) {
+    try
+    {
+      FileInputStream in = new FileInputStream(ConfigFile.configFileFullName);
       properties.load(in);
       logg.globalLogging(configLogID, "Properties loaded from " + configFileFullName);
     } catch (Exception e) {
