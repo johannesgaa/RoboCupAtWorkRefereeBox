@@ -64,7 +64,7 @@ Finally logout and login in again to make the changes work.
 1. Open Eclipse SDK 
 2. Import Project by File -> Import choose in General "Existing Projects into Workspace" than choose the RefereePkg folder
 3. Right click -> Build Path -> Configure Build Path -> navigate to Libraries tab -> click on Add External JARs navigate to “/usr/local/share/java/zmq.jar”.
-4. And from the same tab click on Add External Class Folder navigate to “jzmq/pre” and click OK.
+4. And from the same tab click on Add External Class Folder navigate to “jzmq/perf” and click OK.
 5. Active the JRE and zmq.jar under "Java Build Path" -> "Order and Export"
 6. Run the project. For Referee System drop the RefereePkg src right click on the RefereeSystem.java select Run As Java Application. For Robot System drop the RobotPkg src right click on the JavaClientGUI.java select Run As Java Application.
 
