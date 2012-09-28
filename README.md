@@ -56,7 +56,8 @@ Finally logout and login in again to make the changes work.
 
 
 ### Install [ØMQ Python binding](http://www.zeromq.org/bindings:python)
-    easy_install pyzmq
+    sudo apt-get install python-setuptools
+    sudo easy_install pyzmq
 
 
 ### Use the Eclipse Project
