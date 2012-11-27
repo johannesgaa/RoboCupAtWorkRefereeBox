@@ -329,12 +329,7 @@ public class MainController implements TimerListener {
 	public MouseListener taskTableListener = new MouseListener() {
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
-			int selectedRow = mG.getSequenceTable(compIdent.ordinal()).getSelectedRow();
-			if (selectedRow >= 0) {
-				Task tT = tS.getTaskAtIndex(selectedRow, compIdent);
-				mG.setTaskBoxSelected(tT, compIdent);
-				mG.setStatusLine("Selected task " + tT.getString() + ".");
-			}
+
 		}
 
 		@Override
@@ -349,19 +344,33 @@ public class MainController implements TimerListener {
 
 		@Override
 		public void mousePressed(MouseEvent arg0) {
-			// TODO Auto-generated method stub
+                        int selectedRow = mG.getSequenceTable(compIdent.ordinal()).getSelectedRow();
+			if (selectedRow >= 0) {
+				Task tT = tS.getTaskAtIndex(selectedRow, compIdent);
+				mG.setTaskBoxSelected(tT, compIdent);
+				mG.setStatusLine("Selected task " + tT.getString() + ".");
+			}
+
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent arg0) {
-			int selectedRow = mG.getSequenceTable(compIdent.ordinal()).getSelectedRow();
-			int selectedColumn = mG.getSequenceTable(compIdent.ordinal()).getSelectedColumn();
+                        int selectedRow = mG.getSequenceTable(compIdent.ordinal()).getSelectedRow();
+                    	int selectedColumn = mG.getSequenceTable(compIdent.ordinal()).getSelectedColumn();
 			if (selectedColumn > 0) {
 				tS.setTaskState(selectedRow, selectedColumn, compIdent);
 				mG.setStatusLine("Updated task state of " + tS.getTaskAtIndex(selectedRow, compIdent).getString());
 				mG.setTableCellCorrected(selectedRow, selectedColumn, compIdent);
 				mG.getSequenceTable(compIdent.ordinal()).clearSelection();
 			}
+//			int selectedRow = mG.getSequenceTable(compIdent.ordinal()).getSelectedRow();
+//			int selectedColumn = mG.getSequenceTable(compIdent.ordinal()).getSelectedColumn();
+//			if (selectedColumn > 0) {
+//				tS.setTaskState(selectedRow, selectedColumn, compIdent);
+//				mG.setStatusLine("Updated task state of " + tS.getTaskAtIndex(selectedRow, compIdent).getString());
+//				mG.setTableCellCorrected(selectedRow, selectedColumn, compIdent);
+//				mG.getSequenceTable(compIdent.ordinal()).clearSelection();
+//			}
 
 		}
 	};
