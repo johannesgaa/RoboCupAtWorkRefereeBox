@@ -65,6 +65,8 @@ import view.CompetitionPanel.SequenceTableModel;
 public class MainGUI extends JFrame implements TaskListener, ConnectionListener, TimerListener {
 	private static final long serialVersionUID = 1L;
 	private static final int GAP = 10;
+        
+        private JFileChooser fc;
 	private JPanel statusPanel;
 	private JPanel westPanel;
 	private JButton saveButton;
@@ -127,6 +129,7 @@ public class MainGUI extends JFrame implements TaskListener, ConnectionListener,
 
 	private void initGUI() {
 		this.setTitle("RoboCup@Work");
+                fc = new JFileChooser(".");
 		BorderLayout panelLayout = new BorderLayout();
 		this.setLayout(panelLayout);
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -509,7 +512,7 @@ public class MainGUI extends JFrame implements TaskListener, ConnectionListener,
 	 *            Save dialog should be displayed.
 	 */
 	public File showFolderDialog(FileType fType, DialogType diagType) {
-		JFileChooser fc = new JFileChooser();
+		
 		if (fType == FileType.FILETYPE_TSP) {
 			fc.setFileFilter(new TspFilter());
 		}
