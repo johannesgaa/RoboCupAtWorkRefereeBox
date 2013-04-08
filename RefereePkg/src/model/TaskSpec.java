@@ -256,88 +256,81 @@ public class TaskSpec {
 				ArrayList<String> config = new ArrayList<String>();
 				List<List<String>> objects = new ArrayList<List<String>>();
 				
-				
-//				ArrayList<area> sourceareas = new ArrayList<area>();
-//				ArrayList<area> destareas = new ArrayList<area>();
-								
-				int i = 0;
-				while (itBmt.hasNext()) {
-					// add Orientation Attribute
-					bmt = (BmtTask)itBmt.next();
-					boolean isNew = true;
-					int sCount = 0;
-					for( String q : areas)
-					{
-						if(bmt.getPlaceSource().equals(q))
-						{
-							isNew = false;
-							
-							break;
-						}
-						sCount++;
-					}
-					
-					
-					if(isNew)
-					{
-						areas.add(bmt.getPlaceSource());
-						ArrayList<String> gut = new ArrayList<String>();
-						gut.add(bmt.getObject());
-						objects.add(gut);
-						config.add(bmt.getConfiguration());
-					}
-					else
-					{
-						objects.get(sCount).add(bmt.getObject());						
-					}
-				}
-				itBmt = bmtTaskList.iterator();
-				
-				
-//				final class area{
-//					
-//					area(String namee){ name = namee; }
-//					String name;
-//					String type;
-//					String configuration;
-//				}
-				
 				ArrayList<String> areasDes = new ArrayList<String>();
 				ArrayList<String> configDes = new ArrayList<String>();
 				List<List<String>> objectsDes = new ArrayList<List<String>>();
 				
+				
 //				ArrayList<area> sourceareas = new ArrayList<area>();
 //				ArrayList<area> destareas = new ArrayList<area>();
-								
-				i = 0;
-				while (itBmt.hasNext()) {
+				
+				String startSit = bttTaskList.get(0).getSituation();
+				String endSit = bttTaskList.get(bttTaskList.size()-1).getSituation(); 
+									
+				
+				while (itBtt.hasNext()) {
 					// add Orientation Attribute
-					bmt = (BmtTask)itBmt.next();
-					boolean isNew = true;
-					int sCount = 0;
-					for( String q : areasDes)
+					
+					
+					btt = (BttTask)itBtt.next();
+					
+					if(btt.getSituation().equals(startSit))
 					{
-						if(bmt.getPlaceDestination().equals(q))
+						boolean isNew = true;
+						int sCount = 0;
+						for( String q : areas)
 						{
-							isNew = false;
-							
-							break;
+							if(btt.getPlace().equals(q))
+							{
+								isNew = false;
+								break;
+							}
+							sCount++;
 						}
-						sCount++;
+						
+						
+						if(isNew)
+						{
+							areas.add(btt.getPlace());
+							ArrayList<String> gut = new ArrayList<String>();
+							gut.add(btt.getObject());
+							objects.add(gut);
+							config.add(btt.getConfiguration());
+						}
+						else
+						{
+							objects.get(sCount).add(btt.getObject());						
+						}
+						
 					}
-					
-					
-					if(isNew)
+					else if(btt.getSituation().equals(endSit))
 					{
-						areas.add(bmt.getPlaceDestination());
-						ArrayList<String> gut = new ArrayList<String>();
-						gut.add(bmt.getObject());
-						objectsDes.add(gut);
-						configDes.add(bmt.getConfiguration());
-					}
-					else
-					{
-						objects.get(sCount).add(bmt.getObject());						
+						boolean isNew = true;
+						int sCount = 0;
+						for( String q : areas)
+						{
+							if(btt.getPlace().equals(q))
+							{
+								isNew = false;
+								break;
+							}
+							sCount++;
+						}
+						
+						
+						if(isNew)
+						{
+							areas.add(btt.getPlace());
+							ArrayList<String> gut = new ArrayList<String>();
+							gut.add(btt.getObject());
+							objects.add(gut);
+							config.add(btt.getConfiguration());
+						}
+						else
+						{
+							objects.get(sCount).add(btt.getObject());						
+						}
+						
 					}
 				}
 				
@@ -381,55 +374,9 @@ public class TaskSpec {
 					y++;
 				}	
 			}
+			s = s.concat("<\\competition>");
 			break;
-//			
-//			
-//			s = s.concat("<competition type=\"BTT\">");
-//			
-//			//add Start Configurations
-//			Iterator<BttTask> itBtt = bttTaskList.iterator();
-//			BttTask btt = new BttTask();
-//			while(itBtt.hasNext())
-//			{
-//				btt = itBtt.next();
-//				s=s.concat("<configuration start=\"true\" type=\"" + btt.getConfiguration()+"\">" );
-//				s=s.concat("<area>"+btt.getPlace()+"<\\area>");
-//				
-//				btt.getSituation().
-//			}
-//			
-//		
-//			
-//			
-//			 {
-//				
-//				BttTask previous = new BttTask();
-//				do {
-//					s = s.concat(btt.getSituation() + "situation(");
-//					do {
-//						s = s.concat("<" + btt.getPlace() + ",");
-//						s = s.concat(btt.getConfiguration() + "(");
-//						do {
-//							s = s.concat(btt.getObject() + ",");
-//							previous = btt;
-//							if (itBtt.hasNext())
-//								btt = itBtt.next();
-//							else
-//								btt = new BttTask();
-//						} while (btt.getPlace().equals(previous.getPlace())
-//								&& (btt.getConfiguration().equals(previous
-//										.getConfiguration())));
-//						s = s.substring(0, s.length() - 1); // comma is no
-//						// longer needed
-//						s = s.concat(")>");
-//					} while (btt.getSituation().equals(previous.getSituation()));
-//					s = s.concat(")");
-//					if (btt.getSituation().length() != 0) {
-//						s = s.concat(";");
-//					}
-//				} while (btt.getSituation().length() != 0);
-//			}
-			break;
+
 		case CTT:
 			if (cttTaskList.size() > 0) {
 				Iterator<CttTask> itCtt = cttTaskList.iterator();
@@ -518,7 +465,9 @@ public class TaskSpec {
 				s = s.concat(sTeam2);
 			}
 			break;
+		case PPT:
 		default:
+			break;
 		}
 
 		return s;
