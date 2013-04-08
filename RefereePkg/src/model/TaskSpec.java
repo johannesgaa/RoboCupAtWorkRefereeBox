@@ -84,10 +84,11 @@ public class TaskSpec {
 			break;
 		case BMT:
 			if (bmtTaskList.size() > 0) {	
-				s = s.concat("<competition type=\"BNT\">");
+				s = s.concat("<competition type=\"BMT\">");
 				
 				//Inital Position youbot
 				s= s.concat("<area type=\"Initial\">"+(bmtTaskList.get(0)).getPlaceInitial());
+				s=s.concat("<\\area>");
 				
 				//Add all Areas
 				Iterator<BmtTask> itBmt = bmtTaskList.iterator();
@@ -229,13 +230,158 @@ public class TaskSpec {
 					s= s.concat("<\\area>");
 					y++;
 				}
-					
-					
+				//Final Position youbot
+				s= s.concat("<area type=\"Final\">"+(bmtTaskList.get(bmtTaskList.size()-1)).getPlaceFinal());
 			}
+			
+			s = s.concat("<\\competition>");
 			break;
 		case BTT:
-			if (bttTaskList.size() <= 0)
-				break;
+			if (bttTaskList.size() > 0) {	
+				s = s.concat("<competition type=\"BTT\">");
+				
+				//Add Areas
+				Iterator<BttTask> itBtt = bttTaskList.iterator();
+				BttTask btt = new BttTask();
+				
+//				final class area{
+//					
+//					area(String namee){ name = namee; }
+//					String name;
+//					String type;
+//					String configuration;
+//				}
+				
+				ArrayList<String> areas = new ArrayList<String>();
+				ArrayList<String> config = new ArrayList<String>();
+				List<List<String>> objects = new ArrayList<List<String>>();
+				
+				
+//				ArrayList<area> sourceareas = new ArrayList<area>();
+//				ArrayList<area> destareas = new ArrayList<area>();
+								
+				int i = 0;
+				while (itBmt.hasNext()) {
+					// add Orientation Attribute
+					bmt = (BmtTask)itBmt.next();
+					boolean isNew = true;
+					int sCount = 0;
+					for( String q : areas)
+					{
+						if(bmt.getPlaceSource().equals(q))
+						{
+							isNew = false;
+							
+							break;
+						}
+						sCount++;
+					}
+					
+					
+					if(isNew)
+					{
+						areas.add(bmt.getPlaceSource());
+						ArrayList<String> gut = new ArrayList<String>();
+						gut.add(bmt.getObject());
+						objects.add(gut);
+						config.add(bmt.getConfiguration());
+					}
+					else
+					{
+						objects.get(sCount).add(bmt.getObject());						
+					}
+				}
+				itBmt = bmtTaskList.iterator();
+				
+				
+//				final class area{
+//					
+//					area(String namee){ name = namee; }
+//					String name;
+//					String type;
+//					String configuration;
+//				}
+				
+				ArrayList<String> areasDes = new ArrayList<String>();
+				ArrayList<String> configDes = new ArrayList<String>();
+				List<List<String>> objectsDes = new ArrayList<List<String>>();
+				
+//				ArrayList<area> sourceareas = new ArrayList<area>();
+//				ArrayList<area> destareas = new ArrayList<area>();
+								
+				i = 0;
+				while (itBmt.hasNext()) {
+					// add Orientation Attribute
+					bmt = (BmtTask)itBmt.next();
+					boolean isNew = true;
+					int sCount = 0;
+					for( String q : areasDes)
+					{
+						if(bmt.getPlaceDestination().equals(q))
+						{
+							isNew = false;
+							
+							break;
+						}
+						sCount++;
+					}
+					
+					
+					if(isNew)
+					{
+						areas.add(bmt.getPlaceDestination());
+						ArrayList<String> gut = new ArrayList<String>();
+						gut.add(bmt.getObject());
+						objectsDes.add(gut);
+						configDes.add(bmt.getConfiguration());
+					}
+					else
+					{
+						objects.get(sCount).add(bmt.getObject());						
+					}
+				}
+				
+				//implement all Source areas
+				int y=0;
+				for(String sq : areas )
+				{
+					s= s.concat("<area type=\"Source ");
+					
+					// add Duration Attribute
+					s= s.concat("configuration=\"" + config.get(y) + "\">");
+					
+					//add Objects
+					for(String oq : objects.get(y))
+					{
+						s=s.concat("<object>"+oq+"<\\object>");
+					}
+					s= s.concat(sq);
+					//area value
+					s= s.concat("<\\area>");
+					y++;
+				}
+				
+				//implement all Destination areas
+				y=0;
+				for(String sq : areasDes )
+				{
+					s= s.concat("<area type=\"Destination ");
+					
+					// add Duration Attribute
+					s= s.concat("configuration=\"" + configDes.get(y) + "\">");
+					
+					//add Objects
+					for(String oq : objectsDes.get(y))
+					{
+						s=s.concat("<object>"+oq+"<\\object>");
+					}
+					s= s.concat(sq);
+					//area value
+					s= s.concat("<\\area>");
+					y++;
+				}	
+			}
+			break;
 //			
 //			
 //			s = s.concat("<competition type=\"BTT\">");
