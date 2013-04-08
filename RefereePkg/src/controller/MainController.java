@@ -220,6 +220,18 @@ public class MainController extends BaseController implements TimerListener {
 			}
 		}
 	};
+	private Action sendSpecTest = new AbstractAction("Send Spec Test") {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			
+			String taskSpec = tS.getTaskSpecString(compIdent, true);
+			
+			getTaskController().sendSpec(taskSpec, getThis());
+		}
+	};
+	
 	private Action sendSpec = new AbstractAction("Send Spec") {
 		private static final long serialVersionUID = 1L;
 
@@ -330,6 +342,7 @@ public class MainController extends BaseController implements TimerListener {
 		mG.connectExitAction(exit);
 		mG.connectHelpAction(help);
 		mG.connectSendSpecAction(sendSpec);
+		mG.connectSendSpecTestAction(sendSpecTest);
 		mG.connectAdd(add);
 		mG.connectDown(down);
 		mG.connectUp(up);

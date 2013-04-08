@@ -64,22 +64,24 @@ public class TaskSpec {
 				Iterator<BntTask> itBnt = bntTaskList.iterator();
 				int i = 0;
 				while (itBnt.hasNext()) {
+					BntTask bnt = itBnt.next();
+					
 					// add Orientation Attribute
 					if(i==0)
-						s= s.concat("<area type=\"Initial\" orientation=\"" + ((BntTask)itBnt.next()).getOrientation() + "\" ");
+						s= s.concat("<area type=\"Initial\" orientation=\"" + (bnt).getOrientation() + "\" ");
 					else if(i==bntTaskList.size()-1)
-						s= s.concat("<area type=\"Final\" orientation=\"" + ((BntTask)itBnt.next()).getOrientation() + "\" ");
+						s= s.concat("<area type=\"Final\" orientation=\"" + (bnt).getOrientation() + "\" ");
 					else
-						s= s.concat("<area type=\"Destination\" orientation=\"" + ((BntTask)itBnt.next()).getOrientation() + "\" ");
+						s= s.concat("<area type=\"Destination\" orientation=\"" + (bnt).getOrientation() + "\" ");
 					// add Duration Attribute
-					s= s.concat("pause=\"" + ((BntTask)itBnt.next()).getPause() + "\">");
+					s= s.concat("pause=\"" + (bnt).getPause() + "\">");
 					
 					//area value
-					s= s.concat(((BntTask)itBnt.next()).getPlace());
-					s= s.concat("<\\area>");
+					s= s.concat(bnt.getPlace());
+					s= s.concat("</area>");
 					i++;
 				}
-				s = s.concat("<\\competition>");
+				s = s.concat("</competition>");
 			}
 			break;
 		case BMT:
@@ -88,27 +90,16 @@ public class TaskSpec {
 				
 				//Inital Position youbot
 				s= s.concat("<area type=\"Initial\">"+(bmtTaskList.get(0)).getPlaceInitial());
-				s=s.concat("<\\area>");
+				s=s.concat("</area>");
 				
 				//Add all Areas
 				Iterator<BmtTask> itBmt = bmtTaskList.iterator();
 				BmtTask bmt = new BmtTask();
 				
-//				final class area{
-//					
-//					area(String namee){ name = namee; }
-//					String name;
-//					String type;
-//					String configuration;
-//				}
-				
 				ArrayList<String> areas = new ArrayList<String>();
-				ArrayList<String> config = new ArrayList<String>();
+				ArrayList<String> configs = new ArrayList<String>();
 				List<List<String>> objects = new ArrayList<List<String>>();
 				
-				
-//				ArrayList<area> sourceareas = new ArrayList<area>();
-//				ArrayList<area> destareas = new ArrayList<area>();
 								
 				int i = 0;
 				while (itBmt.hasNext()) {
@@ -134,7 +125,7 @@ public class TaskSpec {
 						ArrayList<String> gut = new ArrayList<String>();
 						gut.add(bmt.getObject());
 						objects.add(gut);
-						config.add(bmt.getConfiguration());
+						configs.add(bmt.getConfiguration());
 					}
 					else
 					{
@@ -144,21 +135,10 @@ public class TaskSpec {
 				itBmt = bmtTaskList.iterator();
 				
 				
-//				final class area{
-//					
-//					area(String namee){ name = namee; }
-//					String name;
-//					String type;
-//					String configuration;
-//				}
-				
 				ArrayList<String> areasDes = new ArrayList<String>();
 				ArrayList<String> configDes = new ArrayList<String>();
 				List<List<String>> objectsDes = new ArrayList<List<String>>();
 				
-//				ArrayList<area> sourceareas = new ArrayList<area>();
-//				ArrayList<area> destareas = new ArrayList<area>();
-								
 				i = 0;
 				while (itBmt.hasNext()) {
 					// add Orientation Attribute
@@ -179,7 +159,7 @@ public class TaskSpec {
 					
 					if(isNew)
 					{
-						areas.add(bmt.getPlaceDestination());
+						areasDes.add(bmt.getPlaceDestination());
 						ArrayList<String> gut = new ArrayList<String>();
 						gut.add(bmt.getObject());
 						objectsDes.add(gut);
@@ -187,7 +167,7 @@ public class TaskSpec {
 					}
 					else
 					{
-						objects.get(sCount).add(bmt.getObject());						
+						objectsDes.get(sCount).add(bmt.getObject());						
 					}
 				}
 				
@@ -195,19 +175,19 @@ public class TaskSpec {
 				int y=0;
 				for(String sq : areas )
 				{
-					s= s.concat("<area type=\"Source ");
+					s= s.concat("<area type=\"Source\" ");
 					
 					// add Duration Attribute
-					s= s.concat("configuration=\"" + config.get(y) + "\">");
+					s= s.concat("configuration=\"" + configs.get(y) + "\">");
 					
 					//add Objects
 					for(String oq : objects.get(y))
 					{
-						s=s.concat("<object>"+oq+"<\\object>");
+						s=s.concat("<object>"+oq+"</object>");
 					}
 					s= s.concat(sq);
 					//area value
-					s= s.concat("<\\area>");
+					s= s.concat("</area>");
 					y++;
 				}
 				
@@ -215,7 +195,7 @@ public class TaskSpec {
 				y=0;
 				for(String sq : areasDes )
 				{
-					s= s.concat("<area type=\"Destination ");
+					s= s.concat("<area type=\"Destination\" ");
 					
 					// add Duration Attribute
 					s= s.concat("configuration=\"" + configDes.get(y) + "\">");
@@ -223,18 +203,18 @@ public class TaskSpec {
 					//add Objects
 					for(String oq : objectsDes.get(y))
 					{
-						s=s.concat("<object>"+oq+"<\\object>");
+						s=s.concat("<object>"+oq+"</object>");
 					}
 					s= s.concat(sq);
 					//area value
-					s= s.concat("<\\area>");
+					s= s.concat("</area>");
 					y++;
 				}
 				//Final Position youbot
-				s= s.concat("<area type=\"Final\">"+(bmtTaskList.get(bmtTaskList.size()-1)).getPlaceFinal());
+				s= s.concat("<area type=\"Final\">"+(bmtTaskList.get(bmtTaskList.size()-1)).getPlaceFinal()+"</area>");
 			}
 			
-			s = s.concat("<\\competition>");
+			s = s.concat("</competition>");
 			break;
 		case BTT:
 			if (bttTaskList.size() > 0) {	
@@ -346,11 +326,11 @@ public class TaskSpec {
 					//add Objects
 					for(String oq : objects.get(y))
 					{
-						s=s.concat("<object>"+oq+"<\\object>");
+						s=s.concat("<object>"+oq+"</object>");
 					}
 					s= s.concat(sq);
 					//area value
-					s= s.concat("<\\area>");
+					s= s.concat("</area>");
 					y++;
 				}
 				
@@ -366,15 +346,15 @@ public class TaskSpec {
 					//add Objects
 					for(String oq : objectsDes.get(y))
 					{
-						s=s.concat("<object>"+oq+"<\\object>");
+						s=s.concat("<object>"+oq+"</object>");
 					}
 					s= s.concat(sq);
 					//area value
-					s= s.concat("<\\area>");
+					s= s.concat("</area>");
 					y++;
 				}	
 			}
-			s = s.concat("<\\competition>");
+			s = s.concat("</competition>");
 			break;
 
 		case CTT:

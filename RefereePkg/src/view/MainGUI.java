@@ -77,6 +77,7 @@ public class MainGUI extends JFrame implements TaskListener, ConnectionListener,
 	private JLabel maxTimeLabel;
 
 	private JButton sendTripletsButton;
+	private JButton sendTripletsTestButton;
 	private JToggleButton timerStartStopButton;
 	private JComboBox<String> orientationsBox;
 	private JComboBox<Short> pausesBox;
@@ -184,6 +185,10 @@ public class MainGUI extends JFrame implements TaskListener, ConnectionListener,
 		sendTripletsButton.setEnabled(false);
 		sendTripletsButton.setHorizontalAlignment(SwingConstants.RIGHT);
 		middleServerPanel.add(sendTripletsButton);
+		sendTripletsTestButton = new JButton();
+		sendTripletsTestButton.setEnabled(true);
+		sendTripletsTestButton.setHorizontalAlignment(SwingConstants.RIGHT);
+		middleServerPanel.add(sendTripletsTestButton);
 		serverPanel.add(middleServerPanel);
 	}
 
@@ -397,6 +402,11 @@ public class MainGUI extends JFrame implements TaskListener, ConnectionListener,
 	public void connectSendSpecAction(Action sendTriplets) {
 		sendTripletsButton.setAction(sendTriplets);
 		sendTripletsButton.setEnabled(false);
+	}
+	
+	public void connectSendSpecTestAction(Action sendTriplets) {
+		sendTripletsTestButton.setAction(sendTriplets);
+		sendTripletsTestButton.setEnabled(true);
 	}
 
 	/**
