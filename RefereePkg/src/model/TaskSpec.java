@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.regex.*;
 import java.util.StringTokenizer;
 import javax.xml.parsers.*;
@@ -92,112 +93,196 @@ public class TaskSpec {
 				Iterator<BmtTask> itBmt = bmtTaskList.iterator();
 				BmtTask bmt = new BmtTask();
 				
-				private final class area{
-					
-				}
+//				final class area{
+//					
+//					area(String namee){ name = namee; }
+//					String name;
+//					String type;
+//					String configuration;
+//				}
+				
+				ArrayList<String> areas = new ArrayList<String>();
+				ArrayList<String> config = new ArrayList<String>();
+				List<List<String>> objects = new ArrayList<List<String>>();
+				
+				
+//				ArrayList<area> sourceareas = new ArrayList<area>();
+//				ArrayList<area> destareas = new ArrayList<area>();
 								
 				int i = 0;
 				while (itBmt.hasNext()) {
 					// add Orientation Attribute
 					bmt = (BmtTask)itBmt.next();
+					boolean isNew = true;
+					int sCount = 0;
+					for( String q : areas)
+					{
+						if(bmt.getPlaceSource().equals(q))
+						{
+							isNew = false;
+							
+							break;
+						}
+						sCount++;
+					}
 					
-					if()
 					
-					s= s.concat("<area type=\"Final\">"+((BmtTask)itBmt.next()).getPlaceFinal());
+					if(isNew)
+					{
+						areas.add(bmt.getPlaceSource());
+						ArrayList<String> gut = new ArrayList<String>();
+						gut.add(bmt.getObject());
+						objects.add(gut);
+						config.add(bmt.getConfiguration());
+					}
+					else
+					{
+						objects.get(sCount).add(bmt.getObject());						
+					}
+				}
+				itBmt = bmtTaskList.iterator();
+				
+				
+//				final class area{
+//					
+//					area(String namee){ name = namee; }
+//					String name;
+//					String type;
+//					String configuration;
+//				}
+				
+				ArrayList<String> areasDes = new ArrayList<String>();
+				ArrayList<String> configDes = new ArrayList<String>();
+				List<List<String>> objectsDes = new ArrayList<List<String>>();
+				
+//				ArrayList<area> sourceareas = new ArrayList<area>();
+//				ArrayList<area> destareas = new ArrayList<area>();
+								
+				i = 0;
+				while (itBmt.hasNext()) {
+					// add Orientation Attribute
+					bmt = (BmtTask)itBmt.next();
+					boolean isNew = true;
+					int sCount = 0;
+					for( String q : areasDes)
+					{
+						if(bmt.getPlaceDestination().equals(q))
+						{
+							isNew = false;
+							
+							break;
+						}
+						sCount++;
+					}
+					
+					
+					if(isNew)
+					{
+						areas.add(bmt.getPlaceDestination());
+						ArrayList<String> gut = new ArrayList<String>();
+						gut.add(bmt.getObject());
+						objectsDes.add(gut);
+						configDes.add(bmt.getConfiguration());
+					}
+					else
+					{
+						objects.get(sCount).add(bmt.getObject());						
+					}
+				}
+				
+				//implement all Source areas
+				int y=0;
+				for(String sq : areas )
+				{
+					s= s.concat("<area type=\"Source ");
 					
 					// add Duration Attribute
-					s= s.concat("pause=\"" + ((BntTask)itBnt.next()).getPause() + "\">");
+					s= s.concat("configuration=\"" + config.get(y) + "\">");
 					
+					//add Objects
+					for(String oq : objects.get(y))
+					{
+						s=s.concat("<object>"+oq+"<\\object>");
+					}
+					s= s.concat(sq);
 					//area value
-					s= s.concat(((BntTask)itBnt.next()).getPlace());
 					s= s.concat("<\\area>");
-					i++;
-				}
-				s = s.concat("<\\competition>");
-				
-				Iterator<BmtTask> itBmt = bmtTaskList.iterator();
-				BmtTask first = new BmtTask();
-				first = itBmt.next();
-				//set Init Position - specified by the first element in bmtTaskList
-				s= s.concat("<area type=\"Inital\">" );
-				s= s.concat(first.getPlaceInitial()+"<\\area>");
-				
-				//add Configuration
-				s=s.concat("<configuration>"+first.getConfiguration()+"<\\configuration>");
-				
-				
-				//add all Objects						
-				s=s.concat("<object>");
-				s=s.concat("<area start=\"true\">" +  first.getPlaceSource()+"<\\area>");
-				s=s.concat("<area end=\"true\">" +  first.getPlaceDestination()+"<\\area>");
-				s=s.concat(first.getObject()+"<\\object>");
-				
-				while (itBmt.hasNext()) {
-					first = itBmt.next();		
-					s=s.concat("<object>");
-					s=s.concat("<area start=\"true\">" +  first.getPlaceSource()+"<\\area>");
-					s=s.concat("<area end=\"true\">" +  first.getPlaceDestination()+"<\\area>");
-					s=s.concat(first.getObject()+"<\\object>");
+					y++;
 				}
 				
-				//set End Position - specified by the last element in bmtTaskList
-				s= s.concat("<area end=\"true\">" );
-				s= s.concat(first.getPlaceFinal()+"<\\area>");
-				
-				
-				s = s.concat("<\\competition>");
+				//implement all Destination areas
+				y=0;
+				for(String sq : areasDes )
+				{
+					s= s.concat("<area type=\"Destination ");
+					
+					// add Duration Attribute
+					s= s.concat("configuration=\"" + configDes.get(y) + "\">");
+					
+					//add Objects
+					for(String oq : objectsDes.get(y))
+					{
+						s=s.concat("<object>"+oq+"<\\object>");
+					}
+					s= s.concat(sq);
+					//area value
+					s= s.concat("<\\area>");
+					y++;
+				}
+					
+					
 			}
 			break;
 		case BTT:
 			if (bttTaskList.size() <= 0)
 				break;
-			
-			
-			s = s.concat("<competition type=\"BTT\">");
-			
-			//add Start Configurations
-			Iterator<BttTask> itBtt = bttTaskList.iterator();
-			BttTask btt = new BttTask();
-			while(itBtt.hasNext())
-			{
-				btt = itBtt.next();
-				s=s.concat("<configuration start=\"true\" type=\"" + btt.getConfiguration()+"\">" );
-				s=s.concat("<area>"+btt.getPlace()+"<\\area>");
-				
-				btt.getSituation().
-			}
-			
-		
-			
-			
-			 {
-				
-				BttTask previous = new BttTask();
-				do {
-					s = s.concat(btt.getSituation() + "situation(");
-					do {
-						s = s.concat("<" + btt.getPlace() + ",");
-						s = s.concat(btt.getConfiguration() + "(");
-						do {
-							s = s.concat(btt.getObject() + ",");
-							previous = btt;
-							if (itBtt.hasNext())
-								btt = itBtt.next();
-							else
-								btt = new BttTask();
-						} while (btt.getPlace().equals(previous.getPlace())
-								&& (btt.getConfiguration().equals(previous
-										.getConfiguration())));
-						s = s.substring(0, s.length() - 1); // comma is no
-						// longer needed
-						s = s.concat(")>");
-					} while (btt.getSituation().equals(previous.getSituation()));
-					s = s.concat(")");
-					if (btt.getSituation().length() != 0) {
-						s = s.concat(";");
-					}
-				} while (btt.getSituation().length() != 0);
-			}
+//			
+//			
+//			s = s.concat("<competition type=\"BTT\">");
+//			
+//			//add Start Configurations
+//			Iterator<BttTask> itBtt = bttTaskList.iterator();
+//			BttTask btt = new BttTask();
+//			while(itBtt.hasNext())
+//			{
+//				btt = itBtt.next();
+//				s=s.concat("<configuration start=\"true\" type=\"" + btt.getConfiguration()+"\">" );
+//				s=s.concat("<area>"+btt.getPlace()+"<\\area>");
+//				
+//				btt.getSituation().
+//			}
+//			
+//		
+//			
+//			
+//			 {
+//				
+//				BttTask previous = new BttTask();
+//				do {
+//					s = s.concat(btt.getSituation() + "situation(");
+//					do {
+//						s = s.concat("<" + btt.getPlace() + ",");
+//						s = s.concat(btt.getConfiguration() + "(");
+//						do {
+//							s = s.concat(btt.getObject() + ",");
+//							previous = btt;
+//							if (itBtt.hasNext())
+//								btt = itBtt.next();
+//							else
+//								btt = new BttTask();
+//						} while (btt.getPlace().equals(previous.getPlace())
+//								&& (btt.getConfiguration().equals(previous
+//										.getConfiguration())));
+//						s = s.substring(0, s.length() - 1); // comma is no
+//						// longer needed
+//						s = s.concat(")>");
+//					} while (btt.getSituation().equals(previous.getSituation()));
+//					s = s.concat(")");
+//					if (btt.getSituation().length() != 0) {
+//						s = s.concat(";");
+//					}
+//				} while (btt.getSituation().length() != 0);
+//			}
 			break;
 		case CTT:
 			if (cttTaskList.size() > 0) {
