@@ -1,0 +1,30 @@
+serverIP: 127.0.0.1
+portTeam1: 11111
+portTeam2: 11112
+configTime: 300
+runTime: 300
+map: RoboCup2012_IMES_MAP_noBoxes.png
+
+bnt.places: T1(65/90), T2(150/90), T3(255/90), T4(355/90), D1(210/235), S1(82/335), S2(208/335), S3(345/335), T5(65/465), T6(355/465), D2(212/465)
+bnt.orientations: N, S, W, E
+bnt.pauses: 1, 2, 3, 4, 5
+
+bmt.places: D1(145/60), D2(145/340), S1(870/60), S2(870/200), S3(870/340), T1(709/323), T2(709/52), T3(600/188), T4(411/188), T5(332/310), T6(332/118), T7(186/186)
+bmt.configurations: line, zigzag, circle
+bmt.objects: M20_100, M20, M30, F20_20_B, S40_40_B, V20
+
+btt.places: D1(145/60), D2(145/340), S1(870/60), S2(870/200), S3(870/340), T1(709/323), T2(709/52), T3(600/188), T4(411/188), T5(332/310), T6(332/118), T7(186/186)
+btt.configurations: line, zigzag, circle
+btt.objects: M20_100, M20, M30, F20_20_B, S40_40_B, V20
+btt.situations: initial, goal
+
+ctt.places: D1(145/60), D2(145/340), S1(870/60), S2(870/200), S3(870/340), T1(709/323), T2(709/52), T3(600/188), T4(411/188), T5(332/310), T6(332/118), T7(186/186)
+ctt.configurations: line, zigzag, circle
+ctt.objects: M20_100, M20, M30, F20_20_B, S40_40_B, V20
+ctt.situations: initial, team1Goal, team2Goal
+
+ppt.places: D1(145/60), D2(145/340), S1(870/60), S2(870/200), S3(870/340), T1(709/323), T2(709/52), T3(600/188), T4(411/188), T5(332/310), T6(332/118), T7(186/186)
+ppt.objects: M20_100, M20, M30, F20_20_B, S40_40_B, V20
+
+cbt.places: D1(145/60), D2(145/340), S1(870/60), S2(870/200), S3(870/340), T1(709/323), T2(709/52), T3(600/188), T4(411/188), T5(332/310), T6(332/118), T7(186/186)
+

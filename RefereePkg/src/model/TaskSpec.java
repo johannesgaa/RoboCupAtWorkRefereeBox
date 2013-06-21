@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.regex.*;
 import java.util.StringTokenizer;
 
@@ -25,6 +26,10 @@ public class TaskSpec {
 	private ArrayList<BmtTask> bmtTaskList;
 	private ArrayList<BttTask> bttTaskList;
 	private ArrayList<CttTask> cttTaskList;
+	private ArrayList<CbtTask> cbtTaskList;
+	private ArrayList<PptTask> pptTaskList;
+
+	
 	private EventListenerList listOfTaskListeners = new EventListenerList();
 	private Logging logg;
 	private String taskListName = "TaskList";
@@ -43,9 +48,545 @@ public class TaskSpec {
 		bmtTaskList = new ArrayList<BmtTask>();
 		bttTaskList = new ArrayList<BttTask>();
 		cttTaskList = new ArrayList<CttTask>();
+		cbtTaskList = new ArrayList<CbtTask>();
+		pptTaskList = new ArrayList<PptTask>();
 		logg = Logging.getInstance();
 	}
 
+	public String getTaskSpecString(CompetitionIdentifier compIdent,
+			boolean xmlFormat) {
+		String s = new String("");
+
+		s = s.concat("<?xml version=\"1.0\"?>");
+
+
+		switch (compIdent) {
+		case BNT:
+			if (bntTaskList.size() > 0) {
+
+				s = s.concat("<competition type=\"BNT\">");
+
+				Iterator<BntTask> itBnt = bntTaskList.iterator();
+				int i = 0;
+				while (itBnt.hasNext()) {
+					BntTask bnt = itBnt.next();
+
+					// add Orientation Attribute
+//					if(i==0)
+//						s= s.concat("<area type=\"Initial\" orientation=\"" + (bnt).getOrientation() + "\" ");
+//					else if(i==bntTaskList.size()-1)
+//						s= s.concat("<area type=\"Final\" orientation=\"" + (bnt).getOrientation() + "\" ");
+//					else
+						s= s.concat("<area type=\"Source\" orientation=\"" + (bnt).getOrientation() + "\" ");
+					// add Duration Attribute
+					s= s.concat("pause=\"" + (bnt).getPause() + "\">");
+
+					//area value
+					s= s.concat(bnt.getPlace());
+					s= s.concat("</area>");
+					i++;
+				}
+				s = s.concat("</competition>");
+			}
+			break;
+		case BMT:
+			if (bmtTaskList.size() > 0) {	
+				s = s.concat("<competition type=\"BMT\">");
+
+				//Inital Position youbot
+				s= s.concat("<area type=\"Initial\">"+(bmtTaskList.get(0)).getPlaceInitial());
+				s=s.concat("</area>");
+
+				//Add all Areas
+				Iterator<BmtTask> itBmt = bmtTaskList.iterator();
+				BmtTask bmt = new BmtTask();
+
+				ArrayList<String> areas = new ArrayList<String>();
+				ArrayList<String> configs = new ArrayList<String>();
+				List<List<String>> objects = new ArrayList<List<String>>();
+
+
+				int i = 0;
+				while (itBmt.hasNext()) {
+					// add Orientation Attribute
+					bmt = (BmtTask)itBmt.next();
+					boolean isNew = true;
+					int sCount = 0;
+					for( String q : areas)
+					{
+						if(bmt.getPlaceSource().equals(q))
+						{
+							isNew = false;
+
+							break;
+						}
+						sCount++;
+					}
+
+
+					if(isNew)
+					{
+						areas.add(bmt.getPlaceSource());
+						ArrayList<String> gut = new ArrayList<String>();
+						gut.add(bmt.getObject());
+						objects.add(gut);
+						configs.add(bmt.getConfiguration());
+					}
+					else
+					{
+						objects.get(sCount).add(bmt.getObject());						
+					}
+				}
+				itBmt = bmtTaskList.iterator();
+
+
+				ArrayList<String> areasDes = new ArrayList<String>();
+				ArrayList<String> configDes = new ArrayList<String>();
+				List<List<String>> objectsDes = new ArrayList<List<String>>();
+
+				i = 0;
+				while (itBmt.hasNext()) {
+					// add Orientation Attribute
+					bmt = (BmtTask)itBmt.next();
+					boolean isNew = true;
+					int sCount = 0;
+					for( String q : areasDes)
+					{
+						if(bmt.getPlaceDestination().equals(q))
+						{
+							isNew = false;
+
+							break;
+						}
+						sCount++;
+					}
+
+
+					if(isNew)
+					{
+						areasDes.add(bmt.getPlaceDestination());
+						ArrayList<String> gut = new ArrayList<String>();
+						gut.add(bmt.getObject());
+						objectsDes.add(gut);
+						configDes.add(bmt.getConfiguration());
+					}
+					else
+					{
+						objectsDes.get(sCount).add(bmt.getObject());						
+					}
+				}
+
+				//implement all Source areas
+				int y=0;
+				for(String sq : areas )
+				{
+					s= s.concat("<area type=\"Source\" ");
+
+					// add Duration Attribute
+					s= s.concat("configuration=\"" + configs.get(y) + "\">");
+
+					//area value
+					s = s.concat(sq);
+					
+					//add Objects
+					for(String oq : objects.get(y))
+					{
+						s=s.concat("<object>"+oq+"</object>");
+					}
+
+					s= s.concat("</area>");
+					y++;
+				}
+
+				//implement all Destination areas
+				y=0;
+				for(String sq : areasDes )
+				{
+					s= s.concat("<area type=\"Destination\" ");
+
+					// add Duration Attribute
+					s= s.concat("configuration=\"" + configDes.get(y) + "\">");
+
+					//area value
+					s = s.concat(sq);
+					
+					//add Objects
+					for(String oq : objectsDes.get(y))
+					{
+						s=s.concat("<object>"+oq+"</object>");
+					}
+
+					s= s.concat("</area>");
+					y++;
+				}
+				//Final Position youbot
+				s= s.concat("<area type=\"Final\">"+(bmtTaskList.get(bmtTaskList.size()-1)).getPlaceFinal()+"</area>");
+			}
+
+			s = s.concat("</competition>");
+			break;
+		case BTT:
+			if (bttTaskList.size() > 0) {	
+				s = s.concat("<competition type=\"BTT\">");
+
+				//Add Areas
+				Iterator<BttTask> itBtt = bttTaskList.iterator();
+				BttTask btt = new BttTask();
+
+				ArrayList<String> areas = new ArrayList<String>();
+				ArrayList<String> config = new ArrayList<String>();
+				List<List<String>> objects = new ArrayList<List<String>>();
+
+				ArrayList<String> areasDes = new ArrayList<String>();
+				ArrayList<String> configDes = new ArrayList<String>();
+				List<List<String>> objectsDes = new ArrayList<List<String>>();
+
+				String startSit = bttTaskList.get(0).getSituation();
+				String endSit = bttTaskList.get(bttTaskList.size()-1).getSituation(); 
+
+
+				while (itBtt.hasNext()) {
+					
+					// add Orientation Attribute
+					btt = (BttTask)itBtt.next();
+
+					if(btt.getSituation().equals(startSit))
+					{
+						boolean isNew = true;
+						int sCount = 0;
+						for( String q : areas)
+						{
+							if(btt.getPlace().equals(q))
+							{
+								isNew = false;
+								break;
+							}
+							sCount++;
+						}
+
+
+						if(isNew)
+						{
+							areas.add(btt.getPlace());
+							ArrayList<String> gut = new ArrayList<String>();
+							gut.add(btt.getObject());
+							objects.add(gut);
+							config.add(btt.getConfiguration());
+						}
+						else
+						{
+							objects.get(sCount).add(btt.getObject());						
+						}
+
+					}
+					else if(btt.getSituation().equals(endSit))
+					{
+						boolean isNew = true;
+						int sCount = 0;
+						for( String q : areasDes)
+						{
+							if(btt.getPlace().equals(q))
+							{
+								isNew = false;
+								break;
+							}
+							sCount++;
+						}
+
+
+						if(isNew)
+						{
+							areasDes.add(btt.getPlace());
+							ArrayList<String> gut = new ArrayList<String>();
+							gut.add(btt.getObject());
+							objectsDes.add(gut);
+							configDes.add(btt.getConfiguration());
+						}
+						else
+						{
+							objectsDes.get(sCount).add(btt.getObject());						
+						}
+
+					}
+				}
+
+				//implement all Source areas
+				int y=0;
+				for(String sq : areas )
+				{
+					s= s.concat("<area type=\"Source\" ");
+
+					// add Duration Attribute
+					s= s.concat("configuration=\"" + config.get(y) + "\">");
+
+					//area value
+					s = s.concat(sq);
+					
+					//add Objects
+					for(String oq : objects.get(y))
+					{
+						s=s.concat("<object>"+oq+"</object>");
+					}
+
+					s= s.concat("</area>");
+					y++;
+				}
+
+				//implement all Destination areas
+				y=0;
+				for(String sq : areasDes )
+				{
+					s= s.concat("<area type=\"Destination\" ");
+
+					// add Duration Attribute
+					s= s.concat("configuration=\"" + configDes.get(y) + "\">");
+
+					//area value
+					s = s.concat(sq);
+					
+					//add Objects
+					for(String oq : objectsDes.get(y))
+					{
+						s=s.concat("<object>"+oq+"</object>");
+					}
+
+					s= s.concat("</area>");
+					y++;
+				}	
+			}
+			s = s.concat("</competition>");
+			break;
+
+		case CTT:
+			if (cttTaskList.size() > 0) {
+				Iterator<CttTask> itCtt = cttTaskList.iterator();
+				CttTask ctt = itCtt.next();
+				CttTask previous = new CttTask();
+				String sTeam1 = "";
+				String sTeam2 = "";
+				do {
+					if (ctt.getSituation().equals("initial")) {
+						sTeam1 = sTeam1.concat(ctt.getSituation()
+								+ "situation(");
+						sTeam2 = sTeam2.concat(ctt.getSituation()
+								+ "situation(");
+						do {
+							sTeam1 = sTeam1.concat("<" + ctt.getPlace() + ",(");
+							sTeam2 = sTeam2.concat("<" + ctt.getPlace() + ",(");
+							do {
+								sTeam1 = sTeam1.concat(ctt.getObject() + ",");
+								sTeam2 = sTeam2.concat(ctt.getObject() + ",");
+								previous = ctt;
+								if (itCtt.hasNext())
+									ctt = itCtt.next();
+								else
+									ctt = new CttTask();
+							} while (ctt.getPlace().equals(previous.getPlace())
+									&& (ctt.getConfiguration().equals(previous
+											.getConfiguration())));
+							sTeam1 = sTeam1.substring(0, sTeam1.length() - 1);
+							sTeam2 = sTeam2.substring(0, sTeam2.length() - 1);
+							sTeam1 = sTeam1.concat(")>");
+							sTeam2 = sTeam2.concat(")>");
+						} while (ctt.getSituation().equals(
+								previous.getSituation()));
+						sTeam1 = sTeam1.concat(")");
+						sTeam2 = sTeam2.concat(")");
+						sTeam1 = sTeam1.concat(";");
+						sTeam2 = sTeam2.concat(";");
+					} else if (ctt.getSituation().equals("team1Goal")) {
+						sTeam1 = sTeam1.concat("goalsituation(");
+						do {
+							sTeam1 = sTeam1.concat("<" + ctt.getPlace() + ",");
+							sTeam1 = sTeam1
+									.concat(ctt.getConfiguration() + "(");
+							do {
+								sTeam1 = sTeam1.concat(ctt.getObject() + ",");
+								previous = ctt;
+								if (itCtt.hasNext())
+									ctt = itCtt.next();
+								else
+									ctt = new CttTask();
+							} while (ctt.getPlace().equals(previous.getPlace())
+									&& (ctt.getConfiguration().equals(previous
+											.getConfiguration())));
+							sTeam1 = sTeam1.substring(0, sTeam1.length() - 1);
+							sTeam1 = sTeam1.concat(")>");
+						} while (ctt.getSituation().equals(
+								previous.getSituation()));
+						sTeam1 = sTeam1.concat(")");
+					} else if (ctt.getSituation().equals("team2Goal")) {
+						sTeam2 = sTeam2.concat("goalsituation(");
+						do {
+							sTeam2 = sTeam2.concat("<" + ctt.getPlace() + ",");
+							sTeam2 = sTeam2
+									.concat(ctt.getConfiguration() + "(");
+							do {
+								sTeam2 = sTeam2.concat(ctt.getObject() + ",");
+								previous = ctt;
+								if (itCtt.hasNext())
+									ctt = itCtt.next();
+								else {
+									ctt = new CttTask();
+								}
+							} while (ctt.getPlace().equals(previous.getPlace())
+									&& (ctt.getConfiguration().equals(previous
+											.getConfiguration())));
+							sTeam2 = sTeam2.substring(0, sTeam2.length() - 1);
+							sTeam2 = sTeam2.concat(")>");
+						} while (ctt.getSituation().equals(
+								previous.getSituation()));
+						sTeam2 = sTeam2.concat(")");
+					}
+				} while (ctt.getSituation().length() != 0);
+
+				s = s.concat(sTeam1);
+				s = s.concat(">#CTT<");
+				s = s.concat(sTeam2);
+			}
+			break;
+		case CBT:
+			if (cbtTaskList.size() > 0) {
+				
+				s = s.concat("<competition type=\"CBT\">");
+				
+				Iterator<CbtTask> itCbt = cbtTaskList.iterator();
+				while (itCbt.hasNext()) {
+					
+					s = s.concat("<area type=\"Source\">");
+					s = s.concat(((CbtTask) itCbt.next()).getPlace());
+					s= s.concat("</area>");
+					
+				}
+				s = s.concat("</competition>");
+			}
+			
+			break;
+		case PPT:
+			if (pptTaskList.size() > 0) {
+				s = s.concat("<competition type=\"PPT\">");
+
+				Iterator<PptTask> itPpt = pptTaskList.iterator();
+				PptTask ppt = new PptTask();
+
+				//Add Source Areas
+				ArrayList<String> areas = new ArrayList<String>();
+				List<List<String>> objects = new ArrayList<List<String>>();
+
+				while (itPpt.hasNext()) {
+					// add object to area
+					ppt = (PptTask)itPpt.next();
+					boolean isNew = true;
+					int areaCount = 0;
+					for( String q : areas)
+					{
+						if(ppt.getSource().equals(q))
+						{
+							isNew = false;
+
+							break;
+						}
+						areaCount++;
+					}
+
+
+					if(isNew)
+					{
+						// new area
+						areas.add(ppt.getSource());
+						ArrayList<String> gut = new ArrayList<String>();
+						gut.add(ppt.getObject());
+						objects.add(gut);
+					}
+					else
+					{
+						objects.get(areaCount).add(ppt.getObject());						
+					}
+				}
+				itPpt = pptTaskList.iterator();
+
+				//Add Destination Areas
+				ArrayList<String> areasDes = new ArrayList<String>();
+				List<List<String>> objectsDes = new ArrayList<List<String>>();
+
+				while (itPpt.hasNext()) {
+					// add object to area
+					ppt = (PptTask)itPpt.next();
+					boolean isNew = true;
+					int areaCount = 0;
+					for( String q : areasDes)
+					{
+						if(ppt.getDestination().equals(q))
+						{
+							isNew = false;
+
+							break;
+						}
+						areaCount++;
+					}
+
+
+					if(isNew)
+					{
+						//new area
+						areasDes.add(ppt.getDestination());
+						ArrayList<String> gut = new ArrayList<String>();
+						gut.add(ppt.getObject());
+						objectsDes.add(gut);
+					}
+					else
+					{
+						objectsDes.get(areaCount).add(ppt.getObject());						
+					}
+				}
+
+				//implement all Source areas
+				int y=0;
+				for(String sq : areas )
+				{
+					s = s.concat("<area type=\"Source\">");
+
+					//area value
+					s = s.concat(sq);
+					
+					//add Objects
+					for(String oq : objects.get(y))
+					{
+						s = s.concat("<object>"+oq+"</object>");
+					}
+					
+					s = s.concat("</area>");
+					y++;
+				}
+
+				//implement all Destination areas
+				y=0;
+				for(String sq : areasDes )
+				{
+					s = s.concat("<area type=\"Destination\">");
+
+					//area value
+					s = s.concat(sq);
+					
+					//add Objects
+					for(String oq : objectsDes.get(y))
+					{
+						s = s.concat("<object>"+oq+"</object>");
+					}
+					
+					s = s.concat("</area>");
+					y++;
+				}
+				s = s.concat("</competition>");	
+			}
+			break;
+		default:
+			break;
+		}
+
+		return s;
+	}
+	
 	public String getTaskSpecString(CompetitionIdentifier compIdent) {
 		String s = new String();
 		s = s.concat(compIdent.name());
@@ -190,6 +731,37 @@ public class TaskSpec {
 				s = s.concat(sTeam2);
 			}
 			break;
+		case CBT:
+			if (cbtTaskList.size() > 0) {
+				Iterator<CbtTask> itCbt = cbtTaskList.iterator();
+				while (itCbt.hasNext()) {
+					s = s.concat(((CbtTask) itCbt.next()).getPlace() + ",");
+				}
+				s = s.substring(0, s.length() - 1); // comma is no
+			}
+			
+			break;
+		case PPT:
+			if (pptTaskList.size() > 0) {
+				Iterator<PptTask> itPpt = pptTaskList.iterator();
+				PptTask ppt = itPpt.next();
+				PptTask previous = new PptTask();
+				
+				s = s.concat(ppt.getSource() + ",(");
+				String destination = ppt.getDestination();
+				do {
+					s = s.concat(ppt.getObject() + ",");
+					previous = ppt;
+					if (itPpt.hasNext())
+						ppt = itPpt.next();
+					else
+						ppt = new PptTask();
+				} while (ppt.getSource().equals(previous.getSource()));				
+				s = s.substring(0, s.length() - 1); // remove last comma
+				s = s.concat("),");
+				s = s.concat(destination);	
+			}
+			break;
 		default:
 		}
 		s = s.concat(">");
@@ -228,6 +800,20 @@ public class TaskSpec {
 			logg.globalLogging(taskListName, CompetitionIdentifier.BTT + cttTask.getString() + " no. " + bttTaskList.indexOf(cttTask) + " added");
 			notifyCttTaskSpecChanged(cttTask, cttTaskList.indexOf(cttTask), cttTaskList);
 			break;
+		case CBT:
+			CbtTask cbtTask = (CbtTask) task;
+			cbtTaskList.add(cbtTask);
+			Collections.sort(cbtTaskList);
+			logg.globalLogging(taskListName, CompetitionIdentifier.CBT + cbtTask.getString() + " no. " + cbtTaskList.indexOf(cbtTask) + " added");
+			notifyCbtTaskSpecChanged(cbtTask, cbtTaskList.indexOf(cbtTask), cbtTaskList);
+			break;
+		case PPT:
+			PptTask pptTask = (PptTask) task;
+			pptTaskList.add(pptTask);
+			Collections.sort(pptTaskList);
+			logg.globalLogging(taskListName, CompetitionIdentifier.PPT + pptTask.getString() + " no. " + pptTaskList.indexOf(pptTask) + " added");
+			notifyPptTaskSpecChanged(pptTask, pptTaskList.indexOf(pptTask), pptTaskList);
+			break;
 		default:
 			return;
 		}
@@ -258,6 +844,19 @@ public class TaskSpec {
 			logg.globalLogging(taskListName, CompetitionIdentifier.CTT + cttTask.getString() + " no. " + pos + " deleted");
 			notifyCttTaskSpecChanged(cttTask, pos, cttTaskList);
 			return cttTask;
+		case CBT:
+			CbtTask cbtTask = cbtTaskList.remove(pos);
+			Collections.sort(cbtTaskList);
+			logg.globalLogging(taskListName, CompetitionIdentifier.CBT + cbtTask.getString() + " no. " + pos + " deleted");
+			notifyCbtTaskSpecChanged(cbtTask, pos, cbtTaskList);
+			return cbtTask;
+		case PPT:
+			PptTask pptTask = pptTaskList.remove(pos);
+			Collections.sort(pptTaskList);
+			logg.globalLogging(taskListName, CompetitionIdentifier.PPT + pptTask.getString() + " no. " + pos + " deleted");
+			notifyPptTaskSpecChanged(pptTask, pos, pptTaskList);
+			return pptTask;
+		
 		default:
 			return null;
 		}
@@ -295,6 +894,20 @@ public class TaskSpec {
 				logg.globalLogging(taskListName, CompetitionIdentifier.CTT + cttTask.getString() + " no. " + cttTaskList.indexOf(cttTask) + " moved up");
 				notifyCttTaskSpecChanged(cttTask, pos, cttTaskList);
 				return cttTask;
+			case CBT:
+				CbtTask cbtTask = cbtTaskList.remove(pos);
+				cbtTaskList.add(pos - 1, cbtTask);
+				Collections.sort(cbtTaskList);
+				logg.globalLogging(taskListName, CompetitionIdentifier.CBT + cbtTask.getString() + " no. " + cbtTaskList.indexOf(cbtTask) + " moved up");
+				notifyCbtTaskSpecChanged(cbtTask, pos, cbtTaskList);
+				return cbtTask;
+			case PPT:
+				PptTask pptTask = pptTaskList.remove(pos);
+				pptTaskList.add(pos - 1, pptTask);
+				Collections.sort(pptTaskList);
+				logg.globalLogging(taskListName, CompetitionIdentifier.PPT + pptTask.getString() + " no. " + pptTaskList.indexOf(pptTask) + " moved up");
+				notifyPptTaskSpecChanged(pptTask, pos, pptTaskList);
+				return pptTask;
 			default:
 				return null;
 			}
@@ -337,6 +950,24 @@ public class TaskSpec {
 			logg.globalLogging(taskListName, CompetitionIdentifier.BTT + cttTask.getString() + " no. " + bttTaskList.indexOf(cttTask) + " moved down");
 			notifyCttTaskSpecChanged(cttTask, pos, cttTaskList);
 			return cttTask;
+		case CBT:
+			if (cbtTaskList.size() == pos + 1)
+				return null;
+			CbtTask cbtTask = cbtTaskList.remove(pos);
+			cbtTaskList.add(pos + 1, cbtTask);
+			Collections.sort(cbtTaskList);
+			logg.globalLogging(taskListName, CompetitionIdentifier.CBT + cbtTask.getString() + " no. " + cbtTaskList.indexOf(cbtTask) + " moved down");
+			notifyCbtTaskSpecChanged(cbtTask, pos, cbtTaskList);
+			return cbtTask;
+		case PPT:
+			if (pptTaskList.size() == pos + 1)
+				return null;
+			PptTask pptTask = pptTaskList.remove(pos);
+			pptTaskList.add(pos + 1, pptTask);
+			Collections.sort(pptTaskList);
+			logg.globalLogging(taskListName, CompetitionIdentifier.PPT + pptTask.getString() + " no. " + pptTaskList.indexOf(pptTask) + " moved down");
+			notifyPptTaskSpecChanged(pptTask, pos, pptTaskList);
+			return pptTask;
 		default:
 			return null;
 		}
@@ -366,6 +997,18 @@ public class TaskSpec {
 			logg.globalLogging(taskListName, CompetitionIdentifier.CTT + cttTask.getString() + " no. " + bttTaskList.indexOf(task) + " updated to " + task.getString());
 			notifyCttTaskSpecChanged(cttTask, bttTaskList.indexOf(cttTask), cttTaskList);
 			return cttTask;
+		case CBT:
+			CbtTask cbtTask = cbtTaskList.set(pos, (CbtTask) task);
+			Collections.sort(cbtTaskList);
+			logg.globalLogging(taskListName, CompetitionIdentifier.CBT + cbtTask.getString() + " no. " + cbtTaskList.indexOf(task) + " updated to " + task.getString());
+			notifyCbtTaskSpecChanged(cbtTask, cbtTaskList.indexOf(cbtTask), cbtTaskList);
+			return cbtTask;
+		case PPT:
+			PptTask pptTask = pptTaskList.set(pos, (PptTask) task);
+			Collections.sort(pptTaskList);
+			logg.globalLogging(taskListName, CompetitionIdentifier.PPT + pptTask.getString() + " no. " + pptTaskList.indexOf(task) + " updated to " + task.getString());
+			notifyPptTaskSpecChanged(pptTask, pptTaskList.indexOf(pptTask), pptTaskList);
+			return pptTask;
 		default:
 			return null;
 		}
@@ -386,6 +1029,10 @@ public class TaskSpec {
 			return bttTaskList.get(index);
 		case CTT:
 			return cttTaskList.get(index);
+		case CBT:
+			return cbtTaskList.get(index);
+		case PPT:
+			return pptTaskList.get(index);
 		default:
 			return null;
 		}
@@ -442,6 +1089,28 @@ public class TaskSpec {
 			}
 		}
 	}
+	
+	public void notifyCbtTaskSpecChanged(CbtTask cbtTask, int pos, ArrayList<CbtTask> cbtTaskList) {
+		Object[] listeners = listOfTaskListeners.getListenerList();
+		// Each listener occupies two elements - the first is the listener class
+		// and the second is the listener instance
+		for (int i = 0; i < listeners.length; i += 2) {
+			if (listeners[i] == TaskListener.class) {
+				((TaskListener) listeners[i + 1]).cbtTaskSpecChanged(cbtTask, pos, cbtTaskList);
+			}
+		}
+	}
+	
+	public void notifyPptTaskSpecChanged(PptTask pptTask, int pos, ArrayList<PptTask> pptTaskList) {
+		Object[] listeners = listOfTaskListeners.getListenerList();
+		// Each listener occupies two elements - the first is the listener class
+		// and the second is the listener instance
+		for (int i = 0; i < listeners.length; i += 2) {
+			if (listeners[i] == TaskListener.class) {
+				((TaskListener) listeners[i + 1]).pptTaskSpecChanged(pptTask, pos, pptTaskList);
+			}
+		}
+	}
 
 	public boolean saveTaskSpec(File file) {
 
@@ -456,6 +1125,10 @@ public class TaskSpec {
 			out.write(getTaskSpecString(CompetitionIdentifier.BTT));
 			out.write("\n");
 			out.write(getTaskSpecString(CompetitionIdentifier.CTT));
+			out.write("\n");
+			out.write(getTaskSpecString(CompetitionIdentifier.CBT));
+			out.write("\n");
+			out.write(getTaskSpecString(CompetitionIdentifier.PPT));
 			out.write("\n");
 			out.close();
 			logg.globalLogging("TODO", "saved actual task specification in >" + file.getName() + "<");
@@ -492,7 +1165,6 @@ public class TaskSpec {
 		tSpecStr = removeSpaces(tSpecStr);
 
 		String competition = tSpecStr.substring(0, 3);
-		System.out.println("competition " + competition);
 		try {
 			if (competition.equals(CompetitionIdentifier.BNT.toString())) {
 				bntTaskList = new ArrayList<BntTask>();
@@ -658,6 +1330,66 @@ public class TaskSpec {
 					}
 				}
 			}
+			if (competition.equals(CompetitionIdentifier.CBT.toString())) {
+
+				cbtTaskList = new ArrayList<CbtTask>();
+				String delimssemicolon = "[;]";
+				String delimskomma = "[,]";
+				String[] taskspec = tSpecStr.split("[<>]");
+								
+				if (taskspec.length > 1) {
+					String[] positions = taskspec[1].split(delimssemicolon);
+					
+					for (int d = 0; d < positions.length; d++) {
+						
+						String[] tokens = positions[d].split(delimskomma);
+
+						for (int i = 0; i < tokens.length; i++) {
+							
+							CbtTask nextTask = new CbtTask();
+
+							nextTask.setPlace(tokens[i]);
+							cbtTaskList.add(nextTask);
+							logg.globalLogging(taskListName, nextTask.getString() + " no. " + cbtTaskList.indexOf(nextTask) + " added");
+							notifyCbtTaskSpecChanged(nextTask, cbtTaskList.indexOf(nextTask), cbtTaskList);
+						
+						}
+					}
+				}
+			}
+			if (competition.equals(CompetitionIdentifier.PPT.toString())) {
+
+				pptTaskList = new ArrayList<PptTask>();
+				String delimsbracket = "[()]";
+				String delimskomma = "[,]";
+				String[] taskspec = tSpecStr.split("[<>]");
+								
+				if (taskspec.length > 1) {
+									
+					String[] spec_splitted = taskspec[1].split(delimsbracket);
+					
+					if(spec_splitted.length == 3) {
+						
+						String src = spec_splitted[0].substring(0, spec_splitted[0].length() - 1); // remove last comma for source location
+						String dest = spec_splitted[2].substring(1, spec_splitted[2].length()); // remove first comma for destination locations
+			
+						String[] objects = spec_splitted[1].split(delimskomma);
+						for (int u = 0; u < objects.length; u++) {
+
+							PptTask nextTask = new PptTask();
+
+							nextTask.setSource(src);
+							nextTask.setObject(objects[u]);
+							nextTask.setDestination(dest);
+							pptTaskList.add(nextTask);
+							logg.globalLogging(taskListName, nextTask.getString() + " no. " + pptTaskList.indexOf(nextTask) + " added");
+							notifyPptTaskSpecChanged(nextTask, pptTaskList.indexOf(nextTask), pptTaskList);
+						
+						}
+			
+					}
+				}
+			}
 		} catch (Exception e) {
 			System.out.println("Caught exception in parseTaskSpec. Error: " + e.getMessage());
 			return false;
@@ -697,6 +1429,16 @@ public class TaskSpec {
 			logg.competitionLogging(taskListName, CompetitionIdentifier.CTT + tT.getString() + " no. " + tripletIndex + " new state: " + tT.getState());
 			notifyCttTaskSpecChanged(((CttTask) tT), column, cttTaskList);
 			break;
+		case CBT:
+			logg.globalLogging(taskListName, CompetitionIdentifier.CBT + tT.getString() + " no. " + tripletIndex + " new state: " + tT.getState());
+			logg.competitionLogging(taskListName, CompetitionIdentifier.CBT + tT.getString() + " no. " + tripletIndex + " new state: " + tT.getState());
+			notifyCbtTaskSpecChanged(((CbtTask) tT), column, cbtTaskList);
+			break;
+		case PPT:
+			logg.globalLogging(taskListName, CompetitionIdentifier.PPT + tT.getString() + " no. " + tripletIndex + " new state: " + tT.getState());
+			logg.competitionLogging(taskListName, CompetitionIdentifier.PPT + tT.getString() + " no. " + tripletIndex + " new state: " + tT.getState());
+			notifyPptTaskSpecChanged(((PptTask) tT), column, pptTaskList);
+			break;
 		default:
 			;
 		}
@@ -718,6 +1460,14 @@ public class TaskSpec {
 			}
 		case CTT:
 			for (CttTask tT : cttTaskList) {
+				tT.setState(StateOfTask.INIT);
+			}
+		case CBT:
+			for (CbtTask tT : cbtTaskList) {
+				tT.setState(StateOfTask.INIT);
+			}
+		case PPT:
+			for (PptTask tT : pptTaskList) {
 				tT.setState(StateOfTask.INIT);
 			}
 		}
@@ -753,6 +1503,20 @@ public class TaskSpec {
 				}
 			}
 			break;
+		case CBT:
+			for (CbtTask tT : cbtTaskList) {
+				if (tT.getState() == StateOfTask.INIT) {
+					return false;
+				}
+			}
+			break;
+		case PPT:
+			for (PptTask tT : pptTaskList) {
+				if (tT.getState() == StateOfTask.INIT) {
+					return false;
+				}
+			}
+			break;
 		default:
 			return false;
 		}
@@ -773,5 +1537,13 @@ public class TaskSpec {
 
 	public ArrayList<CttTask> getCttTaskList() {
 		return cttTaskList;
+	}
+	
+	public ArrayList<CbtTask> getCbtTaskList() {
+		return cbtTaskList;
+	}
+	
+	public ArrayList<PptTask> getPptTaskList() {
+		return pptTaskList;
 	}
 }

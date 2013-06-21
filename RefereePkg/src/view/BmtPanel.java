@@ -17,7 +17,6 @@ import model.Task;
 public class BmtPanel extends CompetitionPanel {
 
 	private static final long serialVersionUID = 1L;
-	private static final int GAP = 10;
 	private JComboBox<String> placeInitialBox;
 	private JComboBox<String> placeSourceBox;
 	private JComboBox<String> placeDestinationBox;

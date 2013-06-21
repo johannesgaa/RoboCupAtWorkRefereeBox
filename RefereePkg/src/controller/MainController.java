@@ -3,6 +3,8 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
@@ -10,8 +12,17 @@ import java.io.File;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
+import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import model.BmtTask;
+import model.BntTask;
+import model.BttTask;
+import model.CbtTask;
+import model.PptTask;
 import model.CompetitionIdentifier;
 import model.ConfigFile;
+import model.CttTask;
 import model.Logging;
 import model.Map;
 import model.Task;
@@ -23,6 +34,8 @@ import view.BmtPanel;
 import view.BntPanel;
 import view.BttPanel;
 import view.CttPanel;
+import view.CbtPanel;
+import view.PptPanel;
 import view.DialogType;
 import view.FileType;
 import view.MainGUI;
@@ -31,15 +44,21 @@ import view.MainGUI;
  * @author BRSU-MAS-ASTT-SoSe2012
  * 
  */
-public class MainController extends BaseController implements TimerListener {
+public class MainController implements TimerListener {
 
+	private MainGUI mG;
+	private TaskSpec tS;
+	private ConfigFile cfgFile;
+	private TaskServer serverTeam1;
+	private TaskServer serverTeam2;
 	private Logging logg;
 	private boolean unsavedChanges = false;
+	private boolean competitionMode = false;
 	private TaskTimer taskTimer;
 	private final String unsavedWarningMsg = "Warning: Unsaved data will be lost. Proceed? ";
 	private final String exitNotAllowedMsg = "System is in Competition Mode. To exit, press Competition Finished button.";
 	private final String uncheckedSubgoalsMsg = "One or more subgoals are still unchecked.";
-	private final int NUMBEROFCOMPETITIONS = 4;
+	protected CompetitionIdentifier compIdent = CompetitionIdentifier.BNT;
 	private WindowAdapter windowAdapter = new WindowAdapter() {
 		@Override
 		public void windowClosing(WindowEvent evt) {
@@ -225,10 +244,54 @@ public class MainController extends BaseController implements TimerListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			
-			String taskSpec = tS.getTaskSpecString(compIdent);
-			
-			getTaskController().sendSpec(taskSpec, getThis());
+			if( mG.isStringFormatXML() )
+			{
+				if (compIdent == CompetitionIdentifier.CTT) {
+					String taskSpec = tS.getTaskSpecString(compIdent, true);
+					String[] newTaskSpec = taskSpec.split("[#]");
+					String message = "";
+					if (newTaskSpec.length > 0 && serverTeam1.sendTaskSpecToClient(newTaskSpec[0])) {
+						message = message.concat("Task specification sent to the " + serverTeam1.getTeamName() + " ");
+					} else {
+						message = message.concat("<html><FONT COLOR=RED>Task specification could not be send to the team1!</FONT>  </html>");
+					}
+					if (newTaskSpec.length > 1 && serverTeam2.sendTaskSpecToClient(newTaskSpec[1])) {
+						message = message.concat("Task specification sent to the " + serverTeam2.getTeamName() + " ");
+					} else {
+						message = message.concat("<html><FONT COLOR=RED>Task specification could not be send to the team2!</FONT>  </html>");
+					}
+					mG.setStatusLine(message);
+				} else {
+					if (serverTeam1.sendTaskSpecToClient(tS.getTaskSpecString(compIdent, true))) {
+						mG.setStatusLine("Task specification sent to the team.");
+					} else {
+						mG.setStatusLine("<html><FONT COLOR=RED>Task specification could not be send to the team!</FONT>  </html>");
+					}
+				}				
+			}else {
+				if (compIdent == CompetitionIdentifier.CTT) {
+					String taskSpec = tS.getTaskSpecString(compIdent);
+					String[] newTaskSpec = taskSpec.split("[#]");
+					String message = "";
+					if (newTaskSpec.length > 0 && serverTeam1.sendTaskSpecToClient(newTaskSpec[0])) {
+						message = message.concat("Task specification sent to the " + serverTeam1.getTeamName() + " ");
+					} else {
+						message = message.concat("<html><FONT COLOR=RED>Task specification could not be send to the team1!</FONT>  </html>");
+					}
+					if (newTaskSpec.length > 1 && serverTeam2.sendTaskSpecToClient(newTaskSpec[1])) {
+						message = message.concat("Task specification sent to the " + serverTeam2.getTeamName() + " ");
+					} else {
+						message = message.concat("<html><FONT COLOR=RED>Task specification could not be send to the team2!</FONT>  </html>");
+					}
+					mG.setStatusLine(message);
+				} else {
+					if (serverTeam1.sendTaskSpecToClient(tS.getTaskSpecString(compIdent))) {
+						mG.setStatusLine("Task specification sent to the team.");
+					} else {
+						mG.setStatusLine("<html><FONT COLOR=RED>Task specification could not be send to the team!</FONT>  </html>");
+					}
+				}				
+			}	
 		}
 	};
 	
@@ -293,9 +356,90 @@ public class MainController extends BaseController implements TimerListener {
 			mG.setStatusLine("Competition finished. Listening for next team.");
 		}
 	};
+	public MouseListener taskTableListener = new MouseListener() {
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			int selectedRow = mG.getSequenceTable(compIdent.ordinal()).getSelectedRow();
+			if (selectedRow >= 0) {
+				Task tT = tS.getTaskAtIndex(selectedRow, compIdent);
+				mG.setTaskBoxSelected(tT, compIdent);
+				mG.setStatusLine("Selected task " + tT.getString() + ".");
+			}
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public void mousePressed(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {
+			int selectedRow = mG.getSequenceTable(compIdent.ordinal()).getSelectedRow();
+			int selectedColumn = mG.getSequenceTable(compIdent.ordinal()).getSelectedColumn();
+			if (selectedColumn > 0) {
+				tS.setTaskState(selectedRow, selectedColumn, compIdent);
+				mG.setStatusLine("Updated task state of " + tS.getTaskAtIndex(selectedRow, compIdent).getString());
+				mG.setTableCellCorrected(selectedRow, selectedColumn, compIdent);
+				mG.getSequenceTable(compIdent.ordinal()).clearSelection();
+			}
+
+		}
+	};
+	public ChangeListener tabbChangeListener = new ChangeListener() {
+		@Override
+		public void stateChanged(ChangeEvent evt) {
+			JTabbedPane pane = (JTabbedPane) evt.getSource();
+			if (competitionMode || pane.getSelectedIndex() == -1) {
+				mG.getTabbedPane().setSelectedIndex(compIdent.ordinal());
+			} else {
+				compIdent = CompetitionIdentifier.values()[pane.getSelectedIndex()];
+				if (compIdent == CompetitionIdentifier.BNT) {
+					serverTeam2.shutdownSocket();
+					tS.notifyBntTaskSpecChanged(new BntTask(), 0, tS.getBntTaskList());
+					return;
+				}
+				if (compIdent == CompetitionIdentifier.BMT) {
+					serverTeam2.shutdownSocket();
+					tS.notifyBmtTaskSpecChanged(new BmtTask(), 0, tS.getBmtTaskList());
+					return;
+				}
+				if (compIdent == CompetitionIdentifier.BTT) {
+					serverTeam2.shutdownSocket();
+					tS.notifyBttTaskSpecChanged(new BttTask(), 0, tS.getBttTaskList());
+					return;
+				}
+				if (compIdent == CompetitionIdentifier.CTT) {
+					createServers();
+					tS.notifyCttTaskSpecChanged(new CttTask(), 0, tS.getCttTaskList());
+					return;
+				}
+				if (compIdent == CompetitionIdentifier.CBT) {
+					serverTeam2.shutdownSocket();
+					tS.notifyCbtTaskSpecChanged(new CbtTask(), 0, tS.getCbtTaskList());
+					return;
+				}
+				if (compIdent == CompetitionIdentifier.PPT) {
+					serverTeam2.shutdownSocket();
+					tS.notifyPptTaskSpecChanged(new PptTask(), 0, tS.getPptTaskList());
+					return;
+				}
+			}
+		}
+	};
+
 	public MainController(String[] args) {
 		tS = new TaskSpec(compIdent.ordinal());
-		mG = new MainGUI(NUMBEROFCOMPETITIONS);
+		mG = new MainGUI(CompetitionIdentifier.values().length);
 		cfgFile = new ConfigFile();
 		serverTeam1 = new TaskServer();
 		serverTeam2 = new TaskServer();
@@ -376,6 +520,13 @@ public class MainController extends BaseController implements TimerListener {
 				((CttPanel) mG.getCompetitionPanel(CompetitionIdentifier.CTT.ordinal())).setValidConfigurations(vte.getValidCTTConfigurations());
 				((CttPanel) mG.getCompetitionPanel(CompetitionIdentifier.CTT.ordinal())).setValidObjects(vte.getValidCTTObjects());
 				((CttPanel) mG.getCompetitionPanel(CompetitionIdentifier.CTT.ordinal())).setValidSituations(vte.getValidCTTSituations());
+				
+				((CbtPanel) mG.getCompetitionPanel(CompetitionIdentifier.CBT.ordinal())).setValidPositions(vte.getValidCBTPositions());
+				
+				((PptPanel) mG.getCompetitionPanel(CompetitionIdentifier.PPT.ordinal())).setValidPositions(vte.getValidPPTPositions());
+				((PptPanel) mG.getCompetitionPanel(CompetitionIdentifier.PPT.ordinal())).setValidObjects(vte.getValidPPTObjects());
+				((PptPanel) mG.getCompetitionPanel(CompetitionIdentifier.PPT.ordinal())).setValidDestinations(vte.getValidPPTPositions());
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -456,5 +607,14 @@ public class MainController extends BaseController implements TimerListener {
 		mG.getCompetitionFinishedButton().setEnabled(true);
 		serverTeam1.disconnectClient();
 		mG.setStatusLine("Timeout. Team disconnected");
+	}
+
+	private void createServers() {
+		serverTeam1.createServerSocket(cfgFile.getServerIP(), cfgFile.getPortTeam1());
+		serverTeam1.listenForConnection();
+		if (compIdent == CompetitionIdentifier.CTT) {
+			serverTeam2.createServerSocket(cfgFile.getServerIP(), cfgFile.getPortTeam2());
+			serverTeam2.listenForConnection();
+		}
 	}
 }

@@ -20,7 +20,6 @@ public class BntPanel extends CompetitionPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final int GAP = 10;
 	private JComboBox<String> placeBox;
 	private JComboBox<String> orientationBox;
 	private JComboBox<String> pauseBox;

@@ -1,5 +1,5 @@
 package model;
 
 public enum CompetitionIdentifier {
-	BNT, BMT, BTT, CTT
+	BNT, BMT, BTT, CTT, CBT, PPT
 }

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import javax.swing.Action;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -26,6 +27,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
@@ -38,8 +40,10 @@ import javax.swing.table.DefaultTableCellRenderer;
 import model.BmtTask;
 import model.BntTask;
 import model.BttTask;
-import model.CompetitionIdentifier;
 import model.CttTask;
+import model.CbtTask;
+import model.PptTask;
+import model.CompetitionIdentifier;
 import model.Task;
 import view.CompetitionPanel.SequenceTableModel;
 
@@ -65,8 +69,6 @@ import view.CompetitionPanel.SequenceTableModel;
 public class MainGUI extends JFrame implements TaskListener, ConnectionListener, TimerListener {
 	private static final long serialVersionUID = 1L;
 	private static final int GAP = 10;
-        
-        private JFileChooser fc;
 	private JPanel statusPanel;
 	private JPanel westPanel;
 	private JButton saveButton;
@@ -77,6 +79,9 @@ public class MainGUI extends JFrame implements TaskListener, ConnectionListener,
 	private JLabel maxTimeLabel;
 
 	private JButton sendTripletsButton;
+	private JRadioButton selectStringFormatStandard;
+	private JRadioButton selectStringFormatXML;
+	private ButtonGroup selectStringFormatGroup;
 	private JToggleButton timerStartStopButton;
 	private JComboBox<String> orientationsBox;
 	private JComboBox<Short> pausesBox;
@@ -95,6 +100,7 @@ public class MainGUI extends JFrame implements TaskListener, ConnectionListener,
 	private JLabel connectedIcon;
 	private JButton disconnectButton;
 	private JPanel upperServerPanel;
+	private JPanel radioButtonPanel;
 	private JPanel middleServerPanel;
 	private JPanel lowerServerPanel;
 	private JLabel connectedLabel;
@@ -129,7 +135,6 @@ public class MainGUI extends JFrame implements TaskListener, ConnectionListener,
 
 	private void initGUI() {
 		this.setTitle("RoboCup@Work");
-                fc = new JFileChooser(".");
 		BorderLayout panelLayout = new BorderLayout();
 		this.setLayout(panelLayout);
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -158,6 +163,11 @@ public class MainGUI extends JFrame implements TaskListener, ConnectionListener,
 		tabbedPane.addTab(CompetitionIdentifier.values()[2].name(), competitionPanel[2]);
 		competitionPanel[3] = new CttPanel(new BorderLayout());
 		tabbedPane.addTab(CompetitionIdentifier.values()[3].name(), competitionPanel[3]);
+		competitionPanel[4] = new CbtPanel(new BorderLayout());
+		tabbedPane.addTab(CompetitionIdentifier.values()[4].name(), competitionPanel[4]);
+		competitionPanel[5] = new PptPanel(new BorderLayout());
+		tabbedPane.addTab(CompetitionIdentifier.values()[5].name(), competitionPanel[5]);
+		
 		westPanel.add(tabbedPane, BorderLayout.CENTER);
 	}
 
@@ -172,6 +182,19 @@ public class MainGUI extends JFrame implements TaskListener, ConnectionListener,
 		serverPanel.add(upperServerPanel);
 	}
 
+	private void createRadioButtonPanel() {
+		radioButtonPanel = new JPanel();
+		radioButtonPanel.setLayout(new BoxLayout(radioButtonPanel, javax.swing.BoxLayout.PAGE_AXIS));
+		selectStringFormatStandard = new JRadioButton("Standard", false);
+		selectStringFormatXML = new JRadioButton("XML", true);
+		selectStringFormatGroup = new ButtonGroup();
+		selectStringFormatGroup.add(selectStringFormatStandard);
+		selectStringFormatGroup.add(selectStringFormatXML);
+		radioButtonPanel.add(selectStringFormatStandard);
+		radioButtonPanel.add(Box.createVerticalGlue());
+		radioButtonPanel.add(selectStringFormatXML);
+	}
+	
 	private void createMiddleServerPanel() {
 		middleServerPanel = new JPanel();
 		middleServerPanel.setLayout(new BoxLayout(middleServerPanel, javax.swing.BoxLayout.LINE_AXIS));
@@ -184,6 +207,8 @@ public class MainGUI extends JFrame implements TaskListener, ConnectionListener,
 		sendTripletsButton.setEnabled(false);
 		sendTripletsButton.setHorizontalAlignment(SwingConstants.RIGHT);
 		middleServerPanel.add(sendTripletsButton);
+		middleServerPanel.add(Box.createHorizontalStrut(GAP));
+		middleServerPanel.add(radioButtonPanel);
 		serverPanel.add(middleServerPanel);
 	}
 
@@ -221,6 +246,8 @@ public class MainGUI extends JFrame implements TaskListener, ConnectionListener,
 		// serverPanel.add(new JSeparator());
 		serverPanel.add(Box.createVerticalStrut(GAP));
 		createUpperServerPanel();
+		serverPanel.add(Box.createVerticalStrut(GAP));
+		createRadioButtonPanel();
 		serverPanel.add(Box.createVerticalStrut(GAP));
 		createMiddleServerPanel();
 		serverPanel.add(Box.createVerticalStrut(GAP));
@@ -398,6 +425,15 @@ public class MainGUI extends JFrame implements TaskListener, ConnectionListener,
 		sendTripletsButton.setAction(sendTriplets);
 		sendTripletsButton.setEnabled(false);
 	}
+	
+	/**
+	 * check if xml format is selected
+	 * @return	boolean - true if xml, false if standard is selected
+	 */
+	public boolean isStringFormatXML()
+	{
+		return selectStringFormatXML.isSelected();
+	}
 
 	/**
 	 * Connect Disconnect button to the corresponding action.
@@ -512,7 +548,7 @@ public class MainGUI extends JFrame implements TaskListener, ConnectionListener,
 	 *            Save dialog should be displayed.
 	 */
 	public File showFolderDialog(FileType fType, DialogType diagType) {
-		
+		JFileChooser fc = new JFileChooser();
 		if (fType == FileType.FILETYPE_TSP) {
 			fc.setFileFilter(new TspFilter());
 		}
@@ -878,6 +914,16 @@ public class MainGUI extends JFrame implements TaskListener, ConnectionListener,
 	@Override
 	public void cttTaskSpecChanged(CttTask cttTask, int pos, ArrayList<CttTask> cttTaskList) {
 		((CttPanel) competitionPanel[CompetitionIdentifier.CTT.ordinal()]).taskSpecChanged(cttTaskList);
+	}
+	
+	@Override
+	public void cbtTaskSpecChanged(CbtTask cbtTask, int pos, ArrayList<CbtTask> cbtTaskList) {
+		((CbtPanel) competitionPanel[CompetitionIdentifier.CBT.ordinal()]).taskSpecChanged(cbtTaskList);
+	}
+	
+	@Override
+	public void pptTaskSpecChanged(PptTask pptTask, int pos, ArrayList<PptTask> pptTaskList) {
+		((PptPanel) competitionPanel[CompetitionIdentifier.PPT.ordinal()]).taskSpecChanged(pptTaskList);
 	}
 
 	public JTabbedPane getTabbedPane() {

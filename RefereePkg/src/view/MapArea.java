@@ -20,8 +20,10 @@ import javax.swing.JScrollPane;
 import model.BmtTask;
 import model.BntTask;
 import model.BttTask;
-import model.CompetitionIdentifier;
 import model.CttTask;
+import model.CbtTask;
+import model.PptTask;
+import model.CompetitionIdentifier;
 import model.StateOfTask;
 
 public class MapArea extends JScrollPane implements TaskListener {
@@ -36,6 +38,8 @@ public class MapArea extends JScrollPane implements TaskListener {
 	private BmtTask bmtTask;
 	private ArrayList<BttTask> bttList;
 	private ArrayList<CttTask> cttList;
+	private ArrayList<CbtTask> cbtList;
+	private ArrayList<PptTask> pptList;
 
 	public MapArea() {
 		super();
@@ -171,7 +175,6 @@ public class MapArea extends JScrollPane implements TaskListener {
 						g2.fillOval(p.x - R_CIRCLE, p.y - R_CIRCLE, 2 * R_CIRCLE, 2 * R_CIRCLE);
 						g2.setColor(Color.black);
 						g2.drawOval(p.x - R_CIRCLE, p.y - R_CIRCLE, 2 * R_CIRCLE, 2 * R_CIRCLE);
-						String ident;
 						g2.drawString(tT.getPlace(), p.x - 5, p.y + 4);
 						if (tT.getConfiguration().length() == 0) {
               g2.drawString(tT.getSituation(), p.x + R_CIRCLE + 2, p.y + 4);
@@ -196,14 +199,42 @@ public class MapArea extends JScrollPane implements TaskListener {
 						g2.fillOval(p.x - R_CIRCLE, p.y - R_CIRCLE, 2 * R_CIRCLE, 2 * R_CIRCLE);
 						g2.setColor(Color.black);
 						g2.drawOval(p.x - R_CIRCLE, p.y - R_CIRCLE, 2 * R_CIRCLE, 2 * R_CIRCLE);
-						String ident;
 						g2.drawString(tT.getPlace(), p.x - 5, p.y + 4);
 						if (tT.getConfiguration().length() == 0) {
-              g2.drawString(tT.getSituation(), p.x + R_CIRCLE + 2, p.y + 4);
-            }
+							g2.drawString(tT.getSituation(), p.x + R_CIRCLE + 2, p.y + 4);
+						}
 						else {
-              g2.drawString(tT.getConfiguration(), p.x + R_CIRCLE + 2, p.y + 4);
-            }
+							g2.drawString(tT.getConfiguration(), p.x + R_CIRCLE + 2, p.y + 4);
+						}
+					}
+				}
+			}
+			
+			if (compIdent == CompetitionIdentifier.CBT) {
+				g2.setStroke(new BasicStroke(2.0f));
+				for (CbtTask tT : cbtList) {
+					if (validPositions.containsKey(tT.getPlace())) {
+						Point p = validPositions.get(tT.getPlace());
+						g2.fillOval(p.x - R_CIRCLE, p.y - R_CIRCLE, 2 * R_CIRCLE, 2 * R_CIRCLE);
+						g2.setColor(Color.black);
+						g2.drawOval(p.x - R_CIRCLE, p.y - R_CIRCLE, 2 * R_CIRCLE, 2 * R_CIRCLE);
+						g2.drawString(tT.getPlace(), p.x - 5, p.y + 4);
+						
+					}
+				}
+			}
+			
+			if (compIdent == CompetitionIdentifier.PPT) {
+				g2.setStroke(new BasicStroke(2.0f));
+				for (PptTask tT : pptList) {
+					if (validPositions.containsKey(tT.getSource())) {
+						
+						Point p = validPositions.get(tT.getSource());
+						g2.fillOval(p.x - R_CIRCLE, p.y - R_CIRCLE, 2 * R_CIRCLE, 2 * R_CIRCLE);
+						g2.setColor(Color.black);
+						g2.drawOval(p.x - R_CIRCLE, p.y - R_CIRCLE, 2 * R_CIRCLE, 2 * R_CIRCLE);
+						g2.drawString(tT.getSource(), p.x - 5, p.y + 4);
+						
 					}
 				}
 			}
@@ -288,6 +319,20 @@ public class MapArea extends JScrollPane implements TaskListener {
 	public void cttTaskSpecChanged(CttTask cttTask, int pos, ArrayList<CttTask> cttTaskList) {
 		this.cttList = cttTaskList;
 		compIdent = CompetitionIdentifier.CTT;
+		mapPane.repaint();
+	}
+	
+	@Override
+	public void cbtTaskSpecChanged(CbtTask cbtTask, int pos, ArrayList<CbtTask> cbtTaskList) {
+		this.cbtList = cbtTaskList;
+		compIdent = CompetitionIdentifier.CBT;
+		mapPane.repaint();
+	}
+	
+	@Override
+	public void pptTaskSpecChanged(PptTask pptTask, int pos, ArrayList<PptTask> pptTaskList) {
+		this.pptList = pptTaskList;
+		compIdent = CompetitionIdentifier.PPT;
 		mapPane.repaint();
 	}
 }
